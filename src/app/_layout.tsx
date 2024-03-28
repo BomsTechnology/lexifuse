@@ -53,9 +53,9 @@ export default function Root() {
                   }}
                 />
                 <Stack.Screen
-                  name="otp"
+                  name="sign-up"
                   options={{
-                    title: 'Otp',
+                    title: 'Sign Up',
                   }}
                 />
                 <Stack.Screen name="(app)" />

@@ -1,42 +1,11 @@
-import { Drawer } from 'expo-router/drawer';
+import { Stack } from 'expo-router';
+
 const AppLayout = () => {
   return (
-    <Drawer
-      screenOptions={{
-        headerShown: true,
-      }}>
-      <Drawer.Screen
-        name="(home)"
-        options={{
-          drawerLabel: 'Home',
-          headerShown: false,
-        }}
-      />
-      <Drawer.Screen
-        name="profile/index"
-        options={{
-          title: 'Profile',
-        }}
-      />
-      <Drawer.Screen
-        name="post/index"
-        options={{
-          title: 'Post',
-        }}
-      />
-      <Drawer.Screen
-        name="setting/index"
-        options={{
-          title: 'setting',
-        }}
-      />
-      <Drawer.Screen
-        name="organizer/index"
-        options={{
-          title: 'organizer',
-        }}
-      />
-    </Drawer>
+    <Stack>
+      <Stack.Screen name="(home)" />
+      <Stack.Screen name="(game)" />
+    </Stack>
   );
 };
 

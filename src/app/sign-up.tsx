@@ -8,9 +8,9 @@ export default function Page() {
     <Container>
       <Main>
         <YStack>
-          <Title>OTP</Title>
+          <Title>Sing - up </Title>
         </YStack>
-        <Link href={{ pathname: '/(app)/(home)/feed' }} asChild>
+        <Link href={{ pathname: '/(app)/(game)/' }} asChild>
           <Button>
             <ButtonText>Go to Home</ButtonText>
           </Button>

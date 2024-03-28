@@ -10,9 +10,9 @@ export default function Page() {
         <YStack>
           <Title>Sign In</Title>
         </YStack>
-        <Link href={{ pathname: '/otp' }} asChild>
+        <Link href={{ pathname: '/sign-up' }} asChild>
           <Button>
-            <ButtonText>Go to OTP</ButtonText>
+            <ButtonText>Go to sign up</ButtonText>
           </Button>
         </Link>
       </Main>

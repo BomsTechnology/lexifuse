@@ -1,4 +1,3 @@
-import { DrawerToggleButton } from '@react-navigation/drawer';
 import { Tabs } from 'expo-router';
 
 const HomeLayout = () => {
@@ -6,30 +5,35 @@ const HomeLayout = () => {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: 'blue',
-        headerLeft: () => <DrawerToggleButton tintColor="#fff" />,
       }}>
       <Tabs.Screen
-        name="feed/index"
+        name="home"
         options={{
-          title: 'Feed',
+          title: 'home',
         }}
       />
       <Tabs.Screen
-        name="users/index"
+        name="stats"
         options={{
-          title: 'Users',
+          title: 'stats',
         }}
       />
       <Tabs.Screen
-        name="chat/index"
+        name="ranking"
         options={{
-          title: 'Chat',
+          title: 'ranking',
         }}
       />
       <Tabs.Screen
-        name="quizz/index"
+        name="market"
         options={{
-          title: 'Quizz',
+          title: 'market',
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: 'settings',
         }}
       />
     </Tabs>

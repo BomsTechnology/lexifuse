@@ -3,7 +3,9 @@ import { createInterFont } from '@tamagui/font-inter';
 import { createMedia } from '@tamagui/react-native-media-driver';
 import { shorthands } from '@tamagui/shorthands';
 import { themes, tokens } from '@tamagui/themes';
-import { createTamagui, styled, SizableText, H1, YStack } from 'tamagui';
+import { createTamagui, styled, SizableText, H1, YStack, createFont, Stack } from 'tamagui';
+
+import colors from './src/constants/colors';
 
 const animations = createAnimations({
   bouncy: {
@@ -27,27 +29,68 @@ const animations = createAnimations({
 
 const headingFont = createInterFont();
 
-const bodyFont = createInterFont();
+const bungeeFont = createFont({
+  family: 'Bungee',
+  size: headingFont.size,
+  weight: {
+    5: '400',
+  },
+  letterSpacing: headingFont.letterSpacing,
+  lineHeight: headingFont.lineHeight,
+  face: {
+    400: { normal: 'Bungee' },
+  },
+});
+
+const exoFont = createFont({
+  family: 'Exo',
+  size: headingFont.size,
+  weight: {
+    4: '300',
+    5: '400',
+    6: '500',
+    7: '600',
+    8: '700',
+    9: '800',
+    10: '900',
+  },
+  letterSpacing: headingFont.letterSpacing,
+  lineHeight: headingFont.lineHeight,
+  face: {
+    300: { normal: 'Exo300' },
+    400: { normal: 'Exo400' },
+    500: { normal: 'Exo500' },
+    600: { normal: 'Exo600' },
+    700: { normal: 'Exo700' },
+    800: { normal: 'Exo800' },
+    900: { normal: 'Exo900' },
+  },
+});
 
 export const Container = styled(YStack, {
   flex: 1,
-  padding: 24,
+  backgroundColor: colors.blue1,
 });
 
 export const Main = styled(YStack, {
   flex: 1,
-  justifyContent: 'space-between',
-  maxWidth: 960,
+  padding: 20,
+  backgroundColor: '$gray1',
+  marginTop: 10,
+  borderTopRightRadius: 40,
+  borderTopLeftRadius: 40,
+  paddingBottom: 40,
 });
 
 export const Title = styled(H1, {
-  color: '#000',
-  size: '$12',
+  color: colors.blue1,
+  fontSize: 30,
 });
 
 export const Subtitle = styled(SizableText, {
-  color: '#38434D',
-  size: '$9',
+  color: '$gray8',
+  fontSize: 18,
+  fontWeight: '600',
 });
 
 export const Button = styled(YStack, {
@@ -76,11 +119,31 @@ export const ButtonText = styled(SizableText, {
   textAlign: 'center',
 });
 
+
+const Frame = styled(Stack, {
+  width: 40,
+  height: 20,
+  borderRadius: 5,
+  padding: 2,
+  variants: {
+    checked: {
+      true: {
+        backgroundColor: colors.green1,
+      },
+      false: {
+        backgroundColor: '$gray8',
+      },
+    },
+  } as const,
+  defaultVariants: {
+    checked: false,
+  },
+});
+
 const config = createTamagui({
   light: {
     color: {
-      background: 'gray',
-      text: 'black',
+      primaryGreen: '#65D777',
     },
   },
   defaultFont: 'body',
@@ -89,8 +152,8 @@ const config = createTamagui({
   themeClassNameOnRoot: true,
   shorthands,
   fonts: {
-    body: bodyFont,
-    heading: headingFont,
+    body: exoFont,
+    heading: bungeeFont,
   },
   themes,
   tokens,

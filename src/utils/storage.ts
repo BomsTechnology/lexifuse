@@ -1,11 +1,12 @@
 import { getLocales } from 'expo-localization';
-import { ThemeName } from 'tamagui';
 
 import { atomWithMMKV } from './atomWithMMKV';
+import SettingProps from '../types/SettingProps';
 
-export const localeWithStorage = atomWithMMKV<string>(
-  'locale',
-  getLocales()[0].languageCode === 'fr' ? 'fr' : 'en'
-);
 
-export const themeWithStorage = atomWithMMKV<ThemeName>('theme', 'light');
+export const settingsWithStorage = atomWithMMKV<SettingProps>('settings', {
+  sound: true,
+  theme: 'light',
+  notification: true,
+  language: getLocales()[0].languageCode === 'fr' ? 'fr' : 'en',
+  library: true,});

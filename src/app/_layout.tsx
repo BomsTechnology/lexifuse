@@ -1,14 +1,25 @@
+import { useFonts, Bungee_400Regular } from '@expo-google-fonts/bungee';
+import {
+  Exo_300Light,
+  Exo_600SemiBold,
+  Exo_700Bold,
+  Exo_800ExtraBold,
+  Exo_900Black,
+  Exo_400Regular,
+  Exo_500Medium,
+} from '@expo-google-fonts/exo';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { Provider as JotaiProvider, useAtom } from 'jotai';
+import { StatusBar } from 'expo-status-bar';
+import { Provider as JotaiProvider } from 'jotai';
 import { useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { TamaguiProvider, Theme } from 'tamagui';
+import { ToastProvider } from 'react-native-toast-notifications';
+import { TamaguiProvider } from 'tamagui';
 
-import i18n from '../i18n/i18n';
-import { localeWithStorage, themeWithStorage } from '../utils/storage';
+import RootStack from '../components/RootStack';
+import Splash from '../components/Splash';
 
 import { queryClient } from '~/src/utils/queryClient';
 import config from '~/tamagui.config';
@@ -16,13 +27,15 @@ import config from '~/tamagui.config';
 SplashScreen.preventAutoHideAsync();
 
 export default function Root() {
-  const [theme] = useAtom(themeWithStorage);
-  const [locale] = useAtom(localeWithStorage);
-  i18n.locale = locale;
-
   const [loaded] = useFonts({
-    Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
-    InterBold: require('@tamagui/font-inter/otf/Inter-Bold.otf'),
+    Bungee: Bungee_400Regular,
+    Exo300: Exo_300Light,
+    Exo600: Exo_600SemiBold,
+    Exo700: Exo_700Bold,
+    Exo800: Exo_800ExtraBold,
+    Exo900: Exo_900Black,
+    Exo400: Exo_400Regular,
+    Exo500: Exo_500Medium,
   });
 
   useEffect(() => {
@@ -31,36 +44,19 @@ export default function Root() {
     }
   }, [loaded]);
 
-  if (!loaded) return null;
+  if (!loaded) return <Splash />;
 
   return (
     <JotaiProvider>
-      <TamaguiProvider config={config} defaultTheme={theme}>
+      <TamaguiProvider config={config}>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <QueryClientProvider client={queryClient}>
-            <Theme name={theme}>
-              <Stack screenOptions={{ headerShown: false }}>
-                <Stack.Screen
-                  name="index"
-                  options={{
-                    title: 'Onboarding',
-                  }}
-                />
-                <Stack.Screen
-                  name="sign-in"
-                  options={{
-                    title: 'Sign In',
-                  }}
-                />
-                <Stack.Screen
-                  name="sign-up"
-                  options={{
-                    title: 'Sign Up',
-                  }}
-                />
-                <Stack.Screen name="(app)" />
-              </Stack>
-            </Theme>
+            <BottomSheetModalProvider>
+              <ToastProvider>
+                <RootStack />
+              </ToastProvider>
+              <StatusBar style="light" />
+            </BottomSheetModalProvider>
           </QueryClientProvider>
         </GestureHandlerRootView>
       </TamaguiProvider>

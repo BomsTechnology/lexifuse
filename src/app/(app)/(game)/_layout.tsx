@@ -1,11 +1,7 @@
 import { Stack } from 'expo-router';
 
 const GameLayout = () => {
-  return (
-    <Stack>
-      <Stack.Screen name="index" />
-    </Stack>
-  );
+  return <Stack screenOptions={{ headerShown: false }} />;
 };
 
 export default GameLayout;

@@ -1,10 +1,11 @@
-import { View, Text } from 'react-native';
+import Container from '~/src/components/layout/Container';
+import Main from '~/src/components/layout/Main';
 
 const Page = () => {
   return (
-    <View>
-      <Text>Page</Text>
-    </View>
+    <Container>
+      <Main></Main>
+    </Container>
   );
 };
 

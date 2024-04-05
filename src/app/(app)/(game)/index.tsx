@@ -1,6 +1,8 @@
 import { Feather, Ionicons } from '@expo/vector-icons';
-import { useRouter, useNavigation } from 'expo-router';
-import { forwardRef, useState, useEffect } from 'react';
+import { useRouter } from 'expo-router';
+import { useAtom } from 'jotai';
+import { forwardRef, useState, useEffect, useRef } from 'react';
+import PagerView from 'react-native-pager-view';
 import { useToast } from 'react-native-toast-notifications';
 import { Circle, H2, ScrollView, SizableText, XStack, YStack } from 'tamagui';
 
@@ -13,61 +15,194 @@ import GameHeader from '~/src/components/header/GameHeader';
 import Container from '~/src/components/layout/Container';
 import Main from '~/src/components/layout/Main';
 import colors from '~/src/constants/colors';
+import { intializeWordStep, answerBgColor, answerBorderColor } from '~/src/functions/setupWords';
+import WordProps from '~/src/types/WordProps';
+import { settingsWithStorage } from '~/src/utils/storage';
+
+const words: WordProps[] = [
+  {
+    id: '1',
+    level_id: '1',
+    word: 'Heureux',
+    answer: 'Joyeux',
+    word1: 'Content',
+    word2: 'Enchanté',
+    word3: 'Radieux',
+    meaning: 'éprouver de la satisfaction ou de la joie',
+  },
+  {
+    id: '2',
+    level_id: '1',
+    word: 'Grand',
+    answer: 'Immense',
+    word1: 'Gigantesque',
+    word2: 'Vaste',
+    word3: 'Énorme',
+    meaning: 'de grande taille ou de grande importance',
+  },
+  {
+    id: '3',
+    level_id: '1',
+    word: 'Rapide',
+    answer: 'Véloce',
+    word1: 'Pressé',
+    word2: 'Prompt',
+    word3: 'Hâtif',
+    meaning: 'se déplacer à grande vitesse',
+  },
+  {
+    id: '4',
+    level_id: '1',
+    word: 'Intelligent',
+    answer: 'Perspicace',
+    word1: 'Astucieux',
+    word2: 'Ingénieux',
+    word3: 'Brillant',
+    meaning: 'posséder une grande capacité mentale',
+  },
+];
+
+type stepProps = WordProps & {
+  stepWords: string[];
+};
 
 const Page = () => {
+  const [settings] = useAtom(settingsWithStorage);
   const router = useRouter();
   const toast = useToast();
-  const navigation = useNavigation();
+  const currentStep = useRef<number>(1);
+  const nbTrueAnswer = useRef<number>(0);
+  const pageView = useRef<PagerView>(null);
+  const [use50, setUse50] = useState(false);
+  const [isValid, setIsValid] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [isOpenSheetKind, setIsOpenSheetKind] = useState(false);
   const [isOpenSheetAnswer, setIsOpenSheetAnswer] = useState(false);
+  const [currentAnswer, setCurrentAnswer] = useState('');
+  const [gameTable, setGameTable] = useState<stepProps[]>([]);
+
+  useEffect(() => {
+    words.map((word) => {
+      setGameTable((prev) => [...prev, { ...word, stepWords: intializeWordStep(word) }]);
+    });
+    setGameTable((prev) => prev.sort(() => Math.random() - 0.5));
+    return () => {};
+  }, []);
+
+  const onValidate = () => {
+    if (currentAnswer === '') {
+      toast.show('Veuillez sélectionner une réponse', {
+        type: 'danger',
+        placement: 'top',
+      });
+      return;
+    }
+    if (!isValid) {
+      setIsValid(true);
+      if (currentAnswer === gameTable[currentStep.current - 1].answer) {
+        setIsError(false);
+        nbTrueAnswer.current = nbTrueAnswer.current + 1;
+      } else {
+        setIsError(true);
+      }
+      if (settings.library) {
+        setTimeout(() => {
+          setIsOpenSheetKind(true);
+        }, 300);
+      }
+    } else {
+      goNext();
+    }
+  };
+
+  const goNext = (csp = 1, al = 1) => {
+    if (currentStep.current < 4) {
+      currentStep.current = currentStep.current + 1;
+      setIsValid(false);
+      setIsError(false);
+      setUse50(false);
+      setCurrentAnswer('');
+      pageView.current?.setPage(currentStep.current - 1);
+    } else {
+      router.replace('/finish');
+    }
+  };
   return (
     <>
       <Container>
-        <GameHeader />
+        <GameHeader step={currentStep.current} />
         <Main justifyContent="space-between" pt={35}>
           <YStack enterStyle={{ opacity: 0, scale: 0.5 }} animation="bouncy" flex={1}>
-            <ScrollView flex={1} contentContainerStyle={{ alignItems: 'center' }}>
-              <SizableText textAlign="center" fontWeight="600" fontSize={20}>
-                Quel est le synonyme de:
-              </SizableText>
-              <H2 textAlign="center" mt={15} color={colors.blue1}>
-                Rêve
-              </H2>
+            {gameTable.length > 0 && (
+              <PagerView initialPage={0} style={{ flex: 1 }} scrollEnabled={false} ref={pageView}>
+                {gameTable.map((item, i) => (
+                  <YStack mt={15} flex={1} key={i + 1}>
+                    <SizableText textAlign="center" fontWeight="600" fontSize={20}>
+                      Quel est le synonyme de:
+                    </SizableText>
+                    <H2 textAlign="center" color={colors.blue1} mb={20}>
+                      {item.word}
+                    </H2>
 
-              <YStack w="100%" mt={30} gap={15}>
-                <AnswerButton
-                  text="cauchemar"
-                  bgColor={colors.orange3}
-                  borderColor={colors.orange4}
-                  textColor={colors.orange1}
-                />
-                <AnswerButton
-                  text="cauchemar"
-                  bgColor={colors.orange3}
-                  borderColor={colors.orange4}
-                  textColor={colors.orange1}
-                />
-                <AnswerButton
-                  text="cauchemar"
-                  bgColor={colors.orange3}
-                  borderColor={colors.orange4}
-                  textColor={colors.orange1}
-                />
-                <AnswerButton
-                  text="cauchemar"
-                  bgColor={colors.orange3}
-                  borderColor={colors.orange4}
-                  textColor={colors.orange1}
-                />
-              </YStack>
-            </ScrollView>
+                    <ScrollView
+                      w="100%"
+                      contentContainerStyle={{ alignItems: 'center', gap: 10, paddingTop: 20 }}>
+                      {item.stepWords?.map((stepWord, index) => (
+                        <AnswerButton
+                          text={stepWord}
+                          bgColor={answerBgColor(
+                            currentStep.current,
+                            i,
+                            currentAnswer,
+                            stepWord,
+                            isValid,
+                            isError,
+                            item.answer,
+                            use50,
+                            index
+                          )}
+                          borderColor={answerBorderColor(
+                            currentStep.current,
+                            i,
+                            currentAnswer,
+                            stepWord,
+                            isValid,
+                            isError,
+                            item.answer,
+                            use50,
+                            index
+                          )}
+                          textColor={
+                            use50 && item.answer !== stepWord && index < 3
+                              ? colors.gray3
+                              : currentAnswer !== '' && currentAnswer === stepWord
+                                ? '#fff'
+                                : colors.orange1
+                          }
+                          key={index}
+                          disabled={isValid || (use50 && item.answer !== stepWord && index < 3)}
+                          icon={
+                            isValid && isError && currentAnswer === stepWord
+                              ? 'cross'
+                              : isValid && isError && stepWord === item.answer
+                                ? 'check'
+                                : undefined
+                          }
+                          onPress={() => {
+                            setCurrentAnswer(stepWord);
+                          }}
+                        />
+                      ))}
+                    </ScrollView>
+                  </YStack>
+                ))}
+              </PagerView>
+            )}
           </YStack>
           <YStack enterStyle={{ opacity: 0, y: 50 }} animation="bouncy">
             <XStack gap="$3" mb={10}>
               <BonusButton
-                onPress={() => {
-                  toast.show("Hello World");
-                }}
+                onPress={() => setUse50(true)}
                 text="50/50"
                 pieces="2"
                 icon={<Feather name="divide" size={24} color="#fff" />}
@@ -83,8 +218,12 @@ const Page = () => {
               backgroundColor={colors.green1}
               borderBottomColor={colors.green2}
               color="#fff"
-              onPress={() => setIsOpenSheetKind(true)}>
-              Valider
+              onPress={() => onValidate()}>
+              {isValid && currentStep.current === gameTable.length
+                ? 'Partie terminée !'
+                : isValid
+                  ? 'Suivant'
+                  : 'Valider'}
             </Button>
           </YStack>
         </Main>
@@ -92,14 +231,19 @@ const Page = () => {
       <AnswerBS
         isOpen={isOpenSheetKind}
         setIsOpen={setIsOpenSheetKind}
-        description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, repudiandae odio! Aliquam,
-          ducimus. Non quisquam iste consectetur dicta natus sint sapiente tempore voluptatem vitae
-          laudantium, totam nesciunt ab earum repudiandae!"
-        text="Rêve"
-        buttonAction={() => router.push('/finish')}
+        description={gameTable.length > 0 ? gameTable[currentStep.current - 1].meaning : ''}
+        text={gameTable.length > 0 ? gameTable[currentStep.current - 1].word : ''}
+        buttonAction={() => goNext()}
+        textButton={
+          isValid && currentStep.current === gameTable.length ? 'Partie terminée !' : 'Suivant'
+        }
       />
 
-      <BonusBS isOpen={isOpenSheetAnswer} setIsOpen={setIsOpenSheetAnswer} text="Utopie" />
+      <BonusBS
+        isOpen={isOpenSheetAnswer}
+        setIsOpen={setIsOpenSheetAnswer}
+        text={gameTable.length > 0 ? gameTable[currentStep.current - 1].answer : ''}
+      />
     </>
   );
 };
@@ -111,13 +255,15 @@ const AnswerButton = ({
   bgColor,
   borderColor,
   textColor,
+  disabled,
 }: {
   icon?: string;
-  text?: string;
-  onPress?: () => void;
+  text: string;
+  onPress: () => void;
   bgColor: string;
   borderColor: string;
   textColor: string;
+  disabled: boolean;
 }) => {
   return (
     <XStack position="relative" flex={1} mx={10}>
@@ -136,6 +282,7 @@ const AnswerButton = ({
         borderBottomColor={borderColor}
         flex={1}
         color={textColor}
+        disabled={disabled}
         onPress={onPress}>
         {text}
       </Button>

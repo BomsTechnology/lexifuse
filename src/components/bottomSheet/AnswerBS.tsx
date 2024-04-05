@@ -17,12 +17,14 @@ const AnswerBS = ({
   text,
   description,
   buttonAction,
+  textButton,
 }: {
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
   text: string;
   description: string;
   buttonAction: () => void;
+  textButton: string;
 }) => {
   const sheetRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ['35%'], []);
@@ -46,7 +48,7 @@ const AnswerBS = ({
           color="#fff"
           enterStyle={{ opacity: 0, y: 50 }}
           animation="bouncy">
-          Suivant
+          {textButton}
         </Button>
       </BottomSheetFooter>
     ),

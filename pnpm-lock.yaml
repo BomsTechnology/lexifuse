@@ -53,6 +53,9 @@ dependencies:
   expo:
     specifier: ~50.0.5
     version: 50.0.14(@babel/core@7.24.3)(@react-native/babel-preset@0.73.21)
+  expo-av:
+    specifier: ~13.10.5
+    version: 13.10.5(expo@50.0.14)
   expo-constants:
     specifier: ~15.4.5
     version: 15.4.5(expo@50.0.14)
@@ -107,6 +110,9 @@ dependencies:
   react-native-mmkv:
     specifier: ^2.12.2
     version: 2.12.2(react-native@0.73.6)(react@18.2.0)
+  react-native-pager-view:
+    specifier: 6.2.3
+    version: 6.2.3(react-native@0.73.6)(react@18.2.0)
   react-native-reanimated:
     specifier: ~3.6.3
     version: 3.6.3(@babel/core@7.24.3)(@babel/plugin-proposal-nullish-coalescing-operator@7.18.6)(@babel/plugin-proposal-optional-chaining@7.21.0)(@babel/plugin-transform-arrow-functions@7.24.1)(@babel/plugin-transform-shorthand-properties@7.24.1)(@babel/plugin-transform-template-literals@7.24.1)(react-native@0.73.6)(react@18.2.0)
@@ -6360,6 +6366,14 @@ packages:
       - supports-color
     dev: false
 
+  /expo-av@13.10.5(expo@50.0.14):
+    resolution: {integrity: sha512-w45oCoe+8PunDeM0rh/Ut6UaGh7OjEJOCjAiQy3nCxpA8FaXB17KaqpsvkAXIMvceHYWndH8+D29esUTS6wEsA==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      expo: 50.0.14(@babel/core@7.24.3)(@react-native/babel-preset@0.73.21)
+    dev: false
+
   /expo-constants@15.4.5(expo@50.0.14):
     resolution: {integrity: sha512-1pVVjwk733hbbIjtQcvUFCme540v4gFemdNlaxM2UXKbfRCOh2hzgKN5joHMOysoXQe736TTUrRj7UaZI5Yyhg==}
     peerDependencies:
@@ -9135,6 +9149,16 @@ packages:
     peerDependencies:
       react: '*'
       react-native: '>=0.71.0'
+    dependencies:
+      react: 18.2.0
+      react-native: 0.73.6(@babel/core@7.24.3)(@babel/preset-env@7.24.3)(react@18.2.0)
+    dev: false
+
+  /react-native-pager-view@6.2.3(react-native@0.73.6)(react@18.2.0):
+    resolution: {integrity: sha512-dqVpXWFtPNfD3D2QQQr8BP+ullS5MhjRJuF8Z/qml4QTILcrWaW8F5iAxKkQR3Jl0ikcEryG/+SQlNcwlo0Ggg==}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
     dependencies:
       react: 18.2.0
       react-native: 0.73.6(@babel/core@7.24.3)(@babel/preset-env@7.24.3)(react@18.2.0)

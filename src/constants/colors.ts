@@ -12,5 +12,6 @@ const colors = {
   orange4: '#FFD589',
   gray1: '#333333',
   gray2: '#D9D9D9',
+  gray3: '#F7F7F7',
 };
 export default colors;

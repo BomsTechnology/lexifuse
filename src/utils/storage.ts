@@ -5,7 +5,7 @@ import SettingProps from '../types/SettingProps';
 
 
 export const settingsWithStorage = atomWithMMKV<SettingProps>('settings', {
-  sound: true,
+  sound: false,
   theme: 'light',
   notification: true,
   language: getLocales()[0].languageCode === 'fr' ? 'fr' : 'en',

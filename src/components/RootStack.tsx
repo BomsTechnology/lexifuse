@@ -17,7 +17,6 @@ const RootStack = () => {
     const { sound } = await Audio.Sound.createAsync(require('~/assets/audio/background.mp3'));
     await sound.setIsLoopingAsync(true);
     await sound.setVolumeAsync(0.5);
-    if (settings.sound) await sound.playAsync();
     setSound(sound);
   }
 
@@ -30,22 +29,26 @@ const RootStack = () => {
 
   useEffect(() => {
     loadSound();
+
+    return () => {
+      unloadSound();
+    };
   }, []);
 
   useEffect(() => {
-    return sound
-      ? () => {
-          sound.unloadAsync();
-        }
-      : undefined;
-  }, [sound]);
-
-  useEffect(() => {
     if (settings.sound) {
-      loadSound();
+      if (sound) {
+        sound.playAsync();
+      }
     } else {
-      unloadSound();
+      if (sound) {
+        sound?.stopAsync();
+      }
     }
+
+    return () => {
+      unloadSound();
+    };
   }, [settings.sound]);
 
   if (!sound) {

@@ -18,22 +18,11 @@ const Page = () => {
       <Container>
         <HomeHeader />
         <Main>
-          <YStack
-            justifyContent="center"
-            alignItems="center"
-            flex={1}
-            enterStyle={{ opacity: 0, scale: 0.5 }}
-            animation="bouncy">
-            <Subtitle>Vous êtes au niveau :</Subtitle>
-            <H1 size="$14" color={colors.blue1}>
-              5
-            </H1>
-          </YStack>
           <YStack gap="$2" enterStyle={{ opacity: 0, y: 100 }} animation="bouncy">
             <Button
               onPress={() => setIsOldLevel(true)}
-              backgroundColor={colors.orange1}
-              borderBottomColor={colors.orange2}
+              backgroundColor={colors.blue1}
+              borderBottomColor={colors.blue2}
               color="#fff">
               Niveaux antierieurs
             </Button>
@@ -46,16 +35,27 @@ const Page = () => {
                 Nouvelle Partie
               </Button>
             </Link>
-            <Link href={{ pathname: '/sign-in' }} asChild>
-              <Button
-                backgroundColor={colors.orange1}
-                borderBottomColor={colors.orange2}
-                color="#fff">
-                <Ionicons name="person" size={20} color="#fff" />
-                Se Connecter
-              </Button>
-            </Link>
           </YStack>
+          <YStack
+            justifyContent="center"
+            alignItems="center"
+            flex={1}
+            enterStyle={{ opacity: 0, scale: 0.5 }}
+            animation="bouncy">
+            <Subtitle>Vous êtes au niveau :</Subtitle>
+            <H1 size="$14" color={colors.blue1}>
+              5
+            </H1>
+          </YStack>
+          <Link href={{ pathname: '/sign-in' }} asChild>
+            <Button
+              backgroundColor={colors.orange1}
+              borderBottomColor={colors.orange2}
+              color="#fff">
+              <Ionicons name="person" size={20} color="#fff" />
+              Se Connecter
+            </Button>
+          </Link>
         </Main>
       </Container>
       <LevelBS isOpen={isOldLevel} setIsOpen={setIsOldLevel} />

@@ -13,6 +13,7 @@ import { SizableText, useTheme } from 'tamagui';
 import Button from '../form/Button';
 
 import colors from '~/src/constants/colors';
+import LanguageItem from '../listItem/LanguageItem';
 
 const languages = [
   {
@@ -74,31 +75,6 @@ const LanguageBS = ({
     []
   );
 
-  const LanguageItem = ({
-    id,
-    name,
-    icon,
-    active,
-  }: {
-    id: number;
-    name: string;
-    icon: string;
-    active: boolean;
-  }) => {
-    return (
-      <TouchableOpacity style={styles.imageContainerStyle}>
-        <Image
-          source={{ uri: icon }}
-          style={[styles.imageStyle, { borderColor: active ? colors.blue1 : 'transparent' }]}
-          resizeMode="cover"
-        />
-        <SizableText fontWeight="600" color={active ? colors.blue1 : '$gray10'}>
-          {name}
-        </SizableText>
-      </TouchableOpacity>
-    );
-  };
-
   return (
     <BottomSheetModal
       backgroundStyle={{ backgroundColor: theme.gray1.get() }}
@@ -120,7 +96,12 @@ const LanguageBS = ({
         style={{ flex: 1 }}
         numColumns={4}
         renderItem={({ item }) => (
-          <LanguageItem id={item.id} name={item.name} icon={item.icon} active={item.id === 0} />
+          <LanguageItem
+            id={item.id.toString()}
+            name={item.name}
+            icon={item.icon}
+            active={item.id === 0}
+          />
         )}
         keyExtractor={(_, index) => index.toString()}
       />
@@ -140,15 +121,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     gap: 20,
     paddingBottom: 100,
-  },
-  imageContainerStyle: {
-    alignItems: 'center',
-  },
-  imageStyle: {
-    width: 65,
-    height: 45,
-    borderRadius: 8,
-    borderWidth: 4,
   },
 });
 

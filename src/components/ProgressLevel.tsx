@@ -5,7 +5,7 @@ import { SizableText, XStack } from 'tamagui';
 import colors from '../constants/colors';
 
 const ProgressLevel = () => {
-  const progress = useSharedValue(50);
+  const progress = useSharedValue(0);
 
   const handlePress = () => {
     progress.value = withSpring(progress.value + 10);

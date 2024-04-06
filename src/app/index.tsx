@@ -16,7 +16,7 @@ import colors from '../constants/colors';
 import { createGame } from '../services/useGame';
 import { getLanguages } from '../services/useLanguage';
 import { Database } from '../types/database.types';
-import { currGameWithStorage, userWithStorage } from '../utils/storage';
+import { currGameWithStorage, gamesWithStorage, userWithStorage } from '../utils/storage';
 
 import { Subtitle, Title } from '~/tamagui.config';
 
@@ -28,6 +28,7 @@ export default function Page() {
   const toast = useToast();
   const [, setUserStorage] = useAtom(userWithStorage);
   const [, setCurrGameStorage] = useAtom(currGameWithStorage);
+  const [, setGamesStorage] = useAtom(gamesWithStorage);
   const [userStorage] = useAtom(loadableAtom);
   const router = useRouter();
   const [selected, setSelected] = useState<Language | null>(null);
@@ -41,6 +42,7 @@ export default function Page() {
     onSuccess: (data) => {
       setCurrGameStorage(data.game!);
       setUserStorage(data.user!);
+      setGamesStorage([data.game!]);
       router.replace('/(app)/(home)/home/');
     },
   });
@@ -55,6 +57,7 @@ export default function Page() {
   if (isPending || userStorage.state === 'loading') return <Splash />;
 
   if (userStorage.data.id !== '') {
+    console.log('userStorage.data.id', userStorage.data);
     return <Redirect href="/(app)/(home)/home" />;
   }
   const start = () => {

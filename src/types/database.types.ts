@@ -56,6 +56,7 @@ export type Database = {
           created_at: string
           id: string
           image: string
+          iso_code: string | null
           name: string
           path: string | null
         }
@@ -63,6 +64,7 @@ export type Database = {
           created_at?: string
           id?: string
           image: string
+          iso_code?: string | null
           name: string
           path?: string | null
         }
@@ -70,6 +72,7 @@ export type Database = {
           created_at?: string
           id?: string
           image?: string
+          iso_code?: string | null
           name?: string
           path?: string | null
         }
@@ -112,6 +115,7 @@ export type Database = {
       }
       users: {
         Row: {
+          auth_id: string | null
           created_at: string
           email: string | null
           id: string
@@ -120,6 +124,7 @@ export type Database = {
           username: string | null
         }
         Insert: {
+          auth_id?: string | null
           created_at?: string
           email?: string | null
           id?: string
@@ -128,6 +133,7 @@ export type Database = {
           username?: string | null
         }
         Update: {
+          auth_id?: string | null
           created_at?: string
           email?: string | null
           id?: string

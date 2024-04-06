@@ -5,5 +5,3 @@ export async function getLanguages(): Promise<Database['public']['Tables']['lang
   const languages = await supabase.from('languages').select('*').throwOnError();
   return languages.data || [];
 }
-
-

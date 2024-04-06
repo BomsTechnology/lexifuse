@@ -17,15 +17,17 @@ import colors from '~/src/constants/colors';
 const LevelBS = ({
   isOpen,
   setIsOpen,
+  level,
 }: {
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
+  level: number;
 }) => {
   const sheetRef = useRef<BottomSheetModal>(null);
   const theme = useTheme();
   const snapPoints = useMemo(() => ['35%'], []);
 
-  const levels = Array.from({ length: 50 }, (_, i) => i + 1);
+  const levels = Array.from({ length: level - 1 }, (_, i) => i + 1);
 
   const renderBackdrop = useCallback(
     (props: BottomSheetDefaultBackdropProps) => (

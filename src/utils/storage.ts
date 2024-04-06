@@ -3,6 +3,7 @@ import { getLocales } from 'expo-localization';
 import { atomWithMMKV } from './atomWithMMKV';
 import SettingProps from '../types/SettingProps';
 import { Database } from '../types/database.types';
+import { GameProps } from '../types/GameProps';
 
 export const settingsWithStorage = atomWithMMKV<SettingProps>('settings', {
   sound: true,
@@ -19,21 +20,15 @@ export const userWithStorage = atomWithMMKV<Database['public']['Tables']['users'
   username: null,
   created_at: '',
   id: '',
+  auth_id: null,
 });
 
-export const currGameWithStorage = atomWithMMKV<Database['public']['Tables']['games']['Row']>(
-  'game',
-  {
-    id: '',
-    user_id: '',
-    language_id: '',
-    level: 0,
-    nb_points: 0,
-    created_at: '',
-  }
-);
+export const currGameWithStorage = atomWithMMKV<GameProps>('game', {
+  id: '',
+  level: 0,
+  nb_points: 0,
+  users: null,
+  languages: null,
+});
 
-export const gamesWithStorage = atomWithMMKV<Database['public']['Tables']['games']['Row'][]>(
-  'games',
-  []
-);
+export const gamesWithStorage = atomWithMMKV<GameProps[]>('games', []);

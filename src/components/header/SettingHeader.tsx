@@ -1,11 +1,15 @@
-import { Ionicons } from '@expo/vector-icons';
+import { useAtom } from 'jotai';
+import { Image } from 'react-native';
 import { H5, SizableText, Square, XStack, YStack } from 'tamagui';
 
 import Piece from '../Piece';
 
 import colors from '~/src/constants/colors';
+import { currGameWithStorage, userWithStorage } from '~/src/utils/storage';
 
 const SettingHeader = () => {
+  const [user] = useAtom(userWithStorage);
+  const [game] = useAtom(currGameWithStorage);
   return (
     <XStack
       px={20}
@@ -15,15 +19,18 @@ const SettingHeader = () => {
       enterStyle={{ opacity: 0 }}
       animation="bouncy">
       <XStack alignItems="center" gap="$3" flex={1}>
-        <Square bg={colors.gray2} h={60} w={60} borderRadius="$6">
-          <Ionicons name="person" size={40} color={colors.orange1} />
+        <Square bg={colors.gray2} h={60} w={60} borderRadius="$6" overflow="hidden">
+          <Image
+            source={{ uri: game.languages!.image }}
+            style={{ width: '100%', height: '100%' }}
+          />
         </Square>
         <YStack>
           <H5 color="#fff" numberOfLines={1}>
-            Florent
+            {user.username}
           </H5>
           <SizableText color={colors.gray2} fontWeight="600">
-            Niveau 3
+            Niveau {game.level}
           </SizableText>
         </YStack>
       </XStack>
@@ -31,11 +38,11 @@ const SettingHeader = () => {
         <XStack alignItems="center" gap="$2">
           <Piece text="C" />
           <SizableText color="#fff" size="$4" fontFamily="$heading">
-            240
+            {user.nb_pieces}
           </SizableText>
         </XStack>
         <SizableText fontWeight="800" fontSize="$5" color={colors.green1}>
-          5469 pts
+          {game.nb_points} pts
         </SizableText>
       </YStack>
     </XStack>

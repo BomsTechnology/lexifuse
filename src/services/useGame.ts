@@ -11,7 +11,7 @@ export async function createGame(userId: string, languageId: string) {
       userId = data.id;
     }
   }
-  const game = await supabase
+  const data = await supabase
     .from('games')
     .insert([
       {
@@ -20,15 +20,20 @@ export async function createGame(userId: string, languageId: string) {
       },
     ])
     .select();
-
+  const game = await getGame(data.data![0].id);
   return {
-    game: game.data?.[0],
+    game: game!,
     user,
   };
 }
 
 export async function getGame(gameId: string) {
-  const game = await supabase.from('games').select('*').eq('id', gameId).single().throwOnError();
+  const game = await supabase
+    .from('games')
+    .select('id,level,nb_points, users(id,username,email,type), languages(id,name,image)')
+    .eq('id', gameId)
+    .single()
+    .throwOnError();
   return game.data;
 }
 

@@ -6,7 +6,7 @@ import {
   BottomSheetFooterProps,
 } from '@gorhom/bottom-sheet';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
-import { useCallback, useMemo, useRef, useEffect } from 'react';
+import { useCallback, useMemo, useRef, useEffect, useState } from 'react';
 import { StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { SizableText, useTheme } from 'tamagui';
 
@@ -14,20 +14,13 @@ import Button from '../form/Button';
 
 import colors from '~/src/constants/colors';
 import LanguageItem from '../listItem/LanguageItem';
+import { useQuery } from '@tanstack/react-query';
+import { getLanguages } from '~/src/services/useLanguage';
+import { Database } from '~/src/types/database.types';
+import { useAtom } from 'jotai';
+import { currGameWithStorage, gamesWithStorage } from '~/src/utils/storage';
 
-const languages = [
-  {
-    id: 0,
-    name: 'Français',
-    icon: 'https://cdn.pixabay.com/photo/2015/11/20/18/55/french-flag-1053711_1280.png',
-  },
-  {
-    id: 1,
-    name: 'Anglais',
-    icon: 'https://cdn.pixabay.com/photo/2017/03/14/21/00/american-flag-2144392_1280.png',
-  },
-];
-
+type Language = Database['public']['Tables']['languages']['Row'];
 const LanguageBS = ({
   isOpen,
   setIsOpen,
@@ -35,9 +28,20 @@ const LanguageBS = ({
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
 }) => {
+  const [currGameStorage, setCurrGameStorage] = useAtom(currGameWithStorage);
+  const [, setGamesStorage] = useAtom(gamesWithStorage);
   const sheetRef = useRef<BottomSheetModal>(null);
   const theme = useTheme();
   const snapPoints = useMemo(() => ['35%'], []);
+  const [selected, setSelected] = useState<Language>({
+    ...currGameStorage.languages!,
+    path: '',
+    created_at: '',
+  });
+  const { data } = useQuery<Language[], Error>({
+    queryKey: ['languages'],
+    queryFn: getLanguages,
+  });
   const renderBackdrop = useCallback(
     (props: BottomSheetDefaultBackdropProps) => (
       <BottomSheetBackdrop
@@ -63,12 +67,12 @@ const LanguageBS = ({
           onPress={() => {
             sheetRef.current?.dismiss();
           }}
-          backgroundColor={colors.red1}
-          borderBottomColor={colors.red2}
+          backgroundColor={colors.blue1}
+          borderBottomColor={colors.blue2}
           color="#fff"
           enterStyle={{ opacity: 0, y: 50 }}
           animation="bouncy">
-          Fermer
+          Changer
         </Button>
       </BottomSheetFooter>
     ),
@@ -90,17 +94,16 @@ const LanguageBS = ({
       footerComponent={renderFooter}
       backdropComponent={renderBackdrop}>
       <BottomSheetFlatList
-        data={languages}
+        data={data}
         contentContainerStyle={styles.containerStyle}
         columnWrapperStyle={styles.wrapperStyle}
         style={{ flex: 1 }}
         numColumns={4}
         renderItem={({ item }) => (
           <LanguageItem
-            id={item.id.toString()}
-            name={item.name}
-            icon={item.icon}
-            active={item.id === 0}
+          language={item}
+          active={selected?.id === item.id}
+          onPress={() => setSelected(item)}
           />
         )}
         keyExtractor={(_, index) => index.toString()}

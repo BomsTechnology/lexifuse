@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
+import { useAtom } from 'jotai';
 import { useState } from 'react';
 import { H1, YStack } from 'tamagui';
 
@@ -9,23 +10,51 @@ import HomeHeader from '~/src/components/header/HomeHeader';
 import Container from '~/src/components/layout/Container';
 import Main from '~/src/components/layout/Main';
 import colors from '~/src/constants/colors';
+import { currGameWithStorage, userWithStorage } from '~/src/utils/storage';
 import { Subtitle } from '~/tamagui.config';
 
 const Page = () => {
+  const [user] = useAtom(userWithStorage);
+  const [game] = useAtom(currGameWithStorage);
   const [isOldLevel, setIsOldLevel] = useState<boolean>(false);
   return (
     <>
       <Container>
-        <HomeHeader />
+        <HomeHeader user={user} game={game} />
         <Main>
+          {!user.auth_id && (
+            <Link href={{ pathname: '/sign-in' }} asChild>
+              <Button
+                backgroundColor={colors.orange1}
+                borderBottomColor={colors.orange2}
+                color="#fff">
+                <Ionicons name="person" size={20} color="#fff" />
+                Se Connecter
+              </Button>
+            </Link>
+          )}
+          <YStack
+            justifyContent="center"
+            alignItems="center"
+            flex={1}
+            enterStyle={{ opacity: 0, scale: 0.5 }}
+            animation="bouncy">
+            <Subtitle>Vous êtes au niveau :</Subtitle>
+            <H1 size="$14" color={colors.blue1}>
+              {game.level}
+            </H1>
+          </YStack>
+
           <YStack gap="$2" enterStyle={{ opacity: 0, y: 100 }} animation="bouncy">
-            <Button
-              onPress={() => setIsOldLevel(true)}
-              backgroundColor={colors.blue1}
-              borderBottomColor={colors.blue2}
-              color="#fff">
-              Niveaux antierieurs
-            </Button>
+            {game.level > 1 && (
+              <Button
+                onPress={() => setIsOldLevel(true)}
+                backgroundColor={colors.blue1}
+                borderBottomColor={colors.blue2}
+                color="#fff">
+                Niveaux antierieurs
+              </Button>
+            )}
             <Link href={{ pathname: '/(app)/(game)/' }} replace asChild>
               <Button
                 backgroundColor={colors.green1}
@@ -36,29 +65,9 @@ const Page = () => {
               </Button>
             </Link>
           </YStack>
-          <YStack
-            justifyContent="center"
-            alignItems="center"
-            flex={1}
-            enterStyle={{ opacity: 0, scale: 0.5 }}
-            animation="bouncy">
-            <Subtitle>Vous êtes au niveau :</Subtitle>
-            <H1 size="$14" color={colors.blue1}>
-              5
-            </H1>
-          </YStack>
-          <Link href={{ pathname: '/sign-in' }} asChild>
-            <Button
-              backgroundColor={colors.orange1}
-              borderBottomColor={colors.orange2}
-              color="#fff">
-              <Ionicons name="person" size={20} color="#fff" />
-              Se Connecter
-            </Button>
-          </Link>
         </Main>
       </Container>
-      <LevelBS isOpen={isOldLevel} setIsOpen={setIsOldLevel} />
+      <LevelBS isOpen={isOldLevel} level={game.level} setIsOpen={setIsOldLevel} />
     </>
   );
 };

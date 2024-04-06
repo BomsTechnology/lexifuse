@@ -1,15 +1,34 @@
+import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { Image, View, StyleSheet } from 'react-native';
 import Animated, { useSharedValue, withSpring, useAnimatedStyle } from 'react-native-reanimated';
 import { SizableText, XStack } from 'tamagui';
 
 import colors from '../constants/colors';
+import { getLevelByLevelAndLanguage } from '../services/useLevel';
+import { LevelProps } from '../types/LevelProps';
 
-const ProgressLevel = () => {
+const ProgressLevel = ({
+  progression,
+  level,
+  language,
+}: {
+  progression: number;
+  level: number;
+  language: string;
+}) => {
   const progress = useSharedValue(0);
 
-  const handlePress = () => {
-    progress.value = withSpring(progress.value + 10);
-  };
+  const { data } = useQuery<LevelProps, Error>({
+    queryKey: ['current_level'],
+    queryFn: () => {
+      return getLevelByLevelAndLanguage({ level, language });
+    },
+  });
+
+  useEffect(() => {
+    progress.value = withSpring(progression);
+  }, [progression]);
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
@@ -20,7 +39,7 @@ const ProgressLevel = () => {
     <XStack bg="#fff" width={120} py="$1" px="$1" borderRadius="$8" position="relative">
       <View style={styles.textContainer}>
         <SizableText color="#fff" size="$2" fontFamily="$heading" textAlign="center">
-          60/80
+          {progression}/{data?.nb_points}
         </SizableText>
       </View>
       <XStack bg={colors.blue3} w="100%" borderRadius="$8" h="$1" overflow="hidden">
@@ -30,7 +49,7 @@ const ProgressLevel = () => {
         <XStack position="relative">
           <View style={styles.textContainer}>
             <SizableText color="#fff" size="$3" textAlign="center" fontFamily="$heading">
-              3
+              {level}
             </SizableText>
           </View>
 

@@ -29,15 +29,6 @@ const HomeLayout = () => {
           }}
         />
         <Tabs.Screen
-          name="stats"
-          options={{
-            title: 'stats',
-            tabBarIcon: ({ focused, color }) => (
-              <MaterialIcons name="bar-chart" size={30} color={color} />
-            ),
-          }}
-        />
-        <Tabs.Screen
           name="ranking"
           options={{
             title: 'ranking',

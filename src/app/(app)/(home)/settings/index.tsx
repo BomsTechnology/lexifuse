@@ -14,9 +14,10 @@ import SettingListItem from '~/src/components/listItem/SettingListItem';
 import SettingListItemWithSwitch from '~/src/components/listItem/SettingListItemWithSwitch';
 import CustomModal from '~/src/components/modal/CustomModal';
 import colors from '~/src/constants/colors';
-import { settingsWithStorage } from '~/src/utils/storage';
+import { settingsWithStorage, userWithStorage } from '~/src/utils/storage';
 
 const Page = () => {
+  const [user] = useAtom(userWithStorage);
   const [settings, setSettings] = useAtom(settingsWithStorage);
   const theme = useTheme();
   const [isOpenEditProfil, setIsOpenEditProfil] = useState<boolean>(false);
@@ -26,7 +27,7 @@ const Page = () => {
   return (
     <>
       <Container>
-        <SettingHeader />
+        {user.auth_id && <SettingHeader />}
         <Main>
           <ScrollView contentContainerStyle={{ padding: 10 }} showsVerticalScrollIndicator={false}>
             <YStack enterStyle={{ opacity: 0, y: 50 }} animation="bouncy">
@@ -34,12 +35,14 @@ const Page = () => {
                 Options
               </SizableText>
               <YStack gap={7} p={18} bg="$gray5" borderRadius="$10" mt={15}>
-                <SettingListItem
-                  onPress={() => setIsOpenEditProfil(true)}
-                  icon={<Ionicons name="person" size={20} color={colors.blue1} />}
-                  text="Nom d'utilisateur"
-                  rightText="Florent"
-                />
+                {user.auth_id && (
+                  <SettingListItem
+                    onPress={() => setIsOpenEditProfil(true)}
+                    icon={<Ionicons name="person" size={20} color={colors.blue1} />}
+                    text="Nom d'utilisateur"
+                    rightText={user.username!}
+                  />
+                )}
                 <SettingListItem
                   onPress={() => setIsOpenLanguage(true)}
                   icon={<Ionicons name="language-sharp" size={20} color={colors.green1} />}
@@ -117,17 +120,19 @@ const Page = () => {
                   text="Aide"
                 />
 
-                <CustomModal
-                  title="Déconnexion"
-                  description="Voulez-vous vous deconnecter de votre compte ?"
-                  confirmText="Confirmer"
-                  cancelText="Annuler">
-                  <SettingListItem
-                    icon={<Foundation name="arrow-down" size={20} color={colors.red1} />}
-                    text="Déconnexion"
-                    textColor={colors.red1}
-                  />
-                </CustomModal>
+                {user.auth_id && (
+                  <CustomModal
+                    title="Déconnexion"
+                    description="Voulez-vous vous deconnecter de votre compte ?"
+                    confirmText="Confirmer"
+                    cancelText="Annuler">
+                    <SettingListItem
+                      icon={<Foundation name="arrow-down" size={20} color={colors.red1} />}
+                      text="Déconnexion"
+                      textColor={colors.red1}
+                    />
+                  </CustomModal>
+                )}
               </YStack>
             </YStack>
           </ScrollView>

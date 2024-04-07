@@ -1,13 +1,18 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { Image } from 'react-native';
 import { Button, H2, SizableText, XStack, YStack } from 'tamagui';
 
 import Piece from '../Piece';
 import CustomModal from '../modal/CustomModal';
 
 import colors from '~/src/constants/colors';
+import { GameProps } from '~/src/types/GameProps';
+import { Database } from '~/src/types/database.types';
 
-const GameHeader = ({ step }: { step: number }) => {
+type UserProps = Database['public']['Tables']['users']['Row'];
+
+const GameHeader = ({ step, user, game }: { step: number; user: UserProps; game: GameProps }) => {
   const router = useRouter();
 
   const goBack = () => {
@@ -33,19 +38,23 @@ const GameHeader = ({ step }: { step: number }) => {
           </Button>
         </CustomModal>
 
-        <XStack alignItems="center" gap="$2">
-          <Piece text="C" />
-          <SizableText color="#fff" size="$4" fontFamily="$heading">
-            240
-          </SizableText>
-        </XStack>
+        <YStack gap="$1" alignItems="flex-end">
+          <Image source={{ uri: game.languages!.image }} style={{ width: 20, height: 12 }} />
+          <XStack alignItems="center" gap="$2">
+            <Piece text="C" />
+
+            <SizableText color="#fff" size="$4" fontFamily="$heading">
+              {user.nb_pieces}
+            </SizableText>
+          </XStack>
+        </YStack>
       </XStack>
 
       <H2 color="#fff" fontSize={35} mt={20}>
         {step}/10
       </H2>
       <SizableText color="rgba(255, 255, 255, 0.7)" fontWeight="600" fontSize={18}>
-        Niveau 12
+        Niveau {game.level}
       </SizableText>
     </YStack>
   );

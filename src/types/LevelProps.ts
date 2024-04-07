@@ -7,5 +7,6 @@ export interface LevelProps {
     id: string;
     name: string;
     image: string;
+    iso_code: string | null;
   } | null;
 }

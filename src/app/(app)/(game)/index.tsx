@@ -1,11 +1,13 @@
 import { Feather, Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useQuery } from '@tanstack/react-query';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useAtom } from 'jotai';
-import { forwardRef, useState, useEffect, useRef } from 'react';
+import { forwardRef, useState, useRef } from 'react';
 import PagerView from 'react-native-pager-view';
 import { useToast } from 'react-native-toast-notifications';
 import { Circle, H2, ScrollView, SizableText, XStack, YStack } from 'tamagui';
 
+import ErrorPage from '~/src/components/ErrorPage';
 import Loading from '~/src/components/Loading';
 import Piece from '~/src/components/Piece';
 import AnswerBS from '~/src/components/bottomSheet/AnswerBS';
@@ -16,58 +18,19 @@ import Container from '~/src/components/layout/Container';
 import Main from '~/src/components/layout/Main';
 import colors from '~/src/constants/colors';
 import { intializeWordStep, answerBgColor, answerBorderColor } from '~/src/functions/setupWords';
+import { getWords } from '~/src/services/useWord';
 import WordProps from '~/src/types/WordProps';
-import { settingsWithStorage } from '~/src/utils/storage';
-
-const words: WordProps[] = [
-  {
-    id: '1',
-    level_id: '1',
-    word: 'Heureux',
-    answer: 'Joyeux',
-    word1: 'Content',
-    word2: 'Enchanté',
-    word3: 'Radieux',
-    meaning: 'éprouver de la satisfaction ou de la joie',
-  },
-  {
-    id: '2',
-    level_id: '1',
-    word: 'Grand',
-    answer: 'Immense',
-    word1: 'Gigantesque',
-    word2: 'Vaste',
-    word3: 'Énorme',
-    meaning: 'de grande taille ou de grande importance',
-  },
-  {
-    id: '3',
-    level_id: '1',
-    word: 'Rapide',
-    answer: 'Véloce',
-    word1: 'Pressé',
-    word2: 'Prompt',
-    word3: 'Hâtif',
-    meaning: 'se déplacer à grande vitesse',
-  },
-  {
-    id: '4',
-    level_id: '1',
-    word: 'Intelligent',
-    answer: 'Perspicace',
-    word1: 'Astucieux',
-    word2: 'Ingénieux',
-    word3: 'Brillant',
-    meaning: 'posséder une grande capacité mentale',
-  },
-];
+import { currGameWithStorage, settingsWithStorage, userWithStorage } from '~/src/utils/storage';
 
 type stepProps = WordProps & {
   stepWords: string[];
 };
 
 const Page = () => {
+  const { level, language } = useLocalSearchParams();
   const [settings] = useAtom(settingsWithStorage);
+  const [user, setUser] = useAtom(userWithStorage);
+  const [game] = useAtom(currGameWithStorage);
   const router = useRouter();
   const toast = useToast();
   const currentStep = useRef<number>(1);
@@ -81,13 +44,20 @@ const Page = () => {
   const [currentAnswer, setCurrentAnswer] = useState('');
   const [gameTable, setGameTable] = useState<stepProps[]>([]);
 
-  useEffect(() => {
-    words.map((word) => {
-      setGameTable((prev) => [...prev, { ...word, stepWords: intializeWordStep(word) }]);
-    });
-    setGameTable((prev) => prev.sort(() => Math.random() - 0.5));
-    return () => {};
-  }, []);
+  const { isPending, error } = useQuery<WordProps[], Error>({
+    queryKey: ['words'],
+    queryFn: async () => {
+      const data = await getWords({
+        languageId: language as string,
+        level: parseInt(level as string),
+      });
+
+      data.forEach((word) => {
+        setGameTable((prev) => [...prev, { ...word, stepWords: intializeWordStep(word) }]);
+      });
+      return data;
+    },
+  });
 
   const onValidate = () => {
     if (currentAnswer === '') {
@@ -108,29 +78,65 @@ const Page = () => {
       if (settings.library) {
         setTimeout(() => {
           setIsOpenSheetKind(true);
-        }, 300);
+        }, 100);
       }
-    } else {
+    } else if (!isOpenSheetKind) {
       goNext();
     }
   };
 
-  const goNext = (csp = 1, al = 1) => {
-    if (currentStep.current < 4) {
-      currentStep.current = currentStep.current + 1;
+  const goNext = () => {
+    if (currentStep.current < 10) {
       setIsValid(false);
       setIsError(false);
       setUse50(false);
       setCurrentAnswer('');
-      pageView.current?.setPage(currentStep.current - 1);
-    } else {
-      router.replace('/finish');
+      pageView.current?.setPage(currentStep.current);
+      currentStep.current = currentStep.current + 1;
+      setIsOpenSheetKind(false);
+    } else if (currentStep.current === 10) {
+      setIsOpenSheetKind(false);
+      setIsOpenSheetAnswer(false);
+      router.replace({ pathname: '/finish', params: { nbTrueAnswer: nbTrueAnswer.current } });
     }
   };
+
+  const bonus50 = () => {
+    if (user.nb_pieces >= 2 && !use50) {
+      setUser((prev) => ({
+        ...prev,
+        nb_pieces: prev.nb_pieces - 2,
+      }));
+      setUse50(true);
+    } else {
+      toast.show("Vous n'avez pas assez de pieces", {
+        type: 'danger',
+        placement: 'top',
+      });
+    }
+  };
+
+  const bonusAnswer = () => {
+    if (user.nb_pieces >= 4 && !isOpenSheetAnswer) {
+      setUser((prev) => ({
+        ...prev,
+        nb_pieces: prev.nb_pieces - 1,
+      }));
+      setIsOpenSheetAnswer(true);
+    } else {
+      toast.show("Vous n'avez pas assez de pieces", {
+        type: 'danger',
+        placement: 'top',
+      });
+    }
+  };
+
+  if (error) return <ErrorPage message={error.message || 'Une erreur est survenue'} button />;
+  if (isPending || gameTable.length === 0) return <Loading />;
   return (
     <>
       <Container>
-        <GameHeader step={currentStep.current} />
+        <GameHeader user={user} game={game} step={currentStep.current} />
         <Main justifyContent="space-between" pt={35}>
           <YStack enterStyle={{ opacity: 0, scale: 0.5 }} animation="bouncy" flex={1}>
             {gameTable.length > 0 && (
@@ -202,13 +208,13 @@ const Page = () => {
           <YStack enterStyle={{ opacity: 0, y: 50 }} animation="bouncy">
             <XStack gap="$3" mb={10}>
               <BonusButton
-                onPress={() => setUse50(true)}
+                onPress={bonus50}
                 text="50/50"
                 pieces="2"
                 icon={<Feather name="divide" size={24} color="#fff" />}
               />
               <BonusButton
-                onPress={() => setIsOpenSheetAnswer(true)}
+                onPress={bonusAnswer}
                 text="réponse"
                 pieces="4"
                 icon={<Ionicons name="bulb" size={24} color="#fff" />}
@@ -231,8 +237,16 @@ const Page = () => {
       <AnswerBS
         isOpen={isOpenSheetKind}
         setIsOpen={setIsOpenSheetKind}
-        description={gameTable.length > 0 ? gameTable[currentStep.current - 1].meaning : ''}
-        text={gameTable.length > 0 ? gameTable[currentStep.current - 1].word : ''}
+        description={
+          gameTable.length > 0 && gameTable[currentStep.current - 1].meaning
+            ? gameTable[currentStep.current - 1].meaning
+            : ''
+        }
+        text={
+          gameTable.length > 0 && gameTable[currentStep.current - 1].word
+            ? gameTable[currentStep.current - 1].word
+            : ''
+        }
         buttonAction={() => goNext()}
         textButton={
           isValid && currentStep.current === gameTable.length ? 'Partie terminée !' : 'Suivant'

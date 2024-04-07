@@ -192,7 +192,35 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_game_words: {
+        Args: {
+          lang_id: string
+          l: number
+        }
+        Returns: {
+          answer: string
+          created_at: string
+          id: string
+          level_id: string | null
+          meaning: string
+          word: string
+          word1: string
+          word2: string
+          word3: string
+        }[]
+      }
+      set_game_user: {
+        Args: {
+          id_game: string
+          id_user: string
+          id_language: string
+          nb_po: number
+          nb_pi: number
+          level_points: number
+          next_level: number
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

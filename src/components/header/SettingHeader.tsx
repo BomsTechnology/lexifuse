@@ -5,10 +5,10 @@ import { H5, SizableText, Square, XStack, YStack } from 'tamagui';
 import Piece from '../Piece';
 
 import colors from '~/src/constants/colors';
-import { currGameWithStorage, userWithStorage } from '~/src/utils/storage';
+import { Database } from '~/src/types/database.types';
+import { currGameWithStorage } from '~/src/utils/storage';
 
-const SettingHeader = () => {
-  const [user] = useAtom(userWithStorage);
+const SettingHeader = ({ user }: { user: Database['public']['Tables']['users']['Row'] }) => {
   const [game] = useAtom(currGameWithStorage);
   return (
     <XStack

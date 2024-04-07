@@ -32,7 +32,7 @@ const ProgressLevel = ({
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
-      width: `${progress.value}%`,
+      width: `${(progress.value * 100) / (data?.nb_points || 1)}%`,
     };
   });
   return (

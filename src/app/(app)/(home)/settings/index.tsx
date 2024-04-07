@@ -1,7 +1,7 @@
 import { Foundation, Ionicons } from '@expo/vector-icons';
 import * as Sharing from 'expo-sharing';
 import { useAtom } from 'jotai';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SizableText, ScrollView, YStack, useTheme } from 'tamagui';
 
 import EditProfilBS from '~/src/components/bottomSheet/EditProfilBS';
@@ -14,20 +14,35 @@ import SettingListItem from '~/src/components/listItem/SettingListItem';
 import SettingListItemWithSwitch from '~/src/components/listItem/SettingListItemWithSwitch';
 import CustomModal from '~/src/components/modal/CustomModal';
 import colors from '~/src/constants/colors';
-import { settingsWithStorage, userWithStorage } from '~/src/utils/storage';
+import { queryClient } from '~/src/utils/queryClient';
+import {
+  currGameWithStorage,
+  gamesWithStorage,
+  settingsWithStorage,
+  userWithStorage,
+} from '~/src/utils/storage';
 
 const Page = () => {
   const [user] = useAtom(userWithStorage);
   const [settings, setSettings] = useAtom(settingsWithStorage);
+  const [currGameStorage, setCurrGameStorage] = useAtom(currGameWithStorage);
+  const [gamesStorage, setGamesStorage] = useAtom(gamesWithStorage);
   const theme = useTheme();
   const [isOpenEditProfil, setIsOpenEditProfil] = useState<boolean>(false);
   const [isOpenHelp, setIsOpenHelp] = useState<boolean>(false);
   const [isOpenLanguage, setIsOpenLanguage] = useState<boolean>(false);
+  const refreshKey = useRef(0);
+
+  useEffect(() => {
+    refreshKey.current += 1;
+    setIsOpenLanguage(false);
+    queryClient.invalidateQueries({ queryKey: ['current_level'] });
+  }, [gamesStorage, currGameStorage]);
 
   return (
     <>
       <Container>
-        {user.auth_id && <SettingHeader />}
+        {user.auth_id && <SettingHeader user={user} />}
         <Main>
           <ScrollView contentContainerStyle={{ padding: 10 }} showsVerticalScrollIndicator={false}>
             <YStack enterStyle={{ opacity: 0, y: 50 }} animation="bouncy">
@@ -47,7 +62,7 @@ const Page = () => {
                   onPress={() => setIsOpenLanguage(true)}
                   icon={<Ionicons name="language-sharp" size={20} color={colors.green1} />}
                   text="Langue de jeu"
-                  rightText="Français"
+                  rightText={currGameStorage.languages?.name}
                 />
                 <SettingListItemWithSwitch
                   icon={
@@ -139,7 +154,16 @@ const Page = () => {
         </Main>
       </Container>
       <EditProfilBS isOpen={isOpenEditProfil} setIsOpen={setIsOpenEditProfil} />
-      <LanguageBS isOpen={isOpenLanguage} setIsOpen={setIsOpenLanguage} />
+      <LanguageBS
+        isOpen={isOpenLanguage}
+        setIsOpen={setIsOpenLanguage}
+        user={user}
+        currGameStorage={currGameStorage}
+        gamesStorage={gamesStorage}
+        setCurrGameStorage={setCurrGameStorage}
+        setGamesStorage={setGamesStorage}
+        key={refreshKey.current}
+      />
       <HelpBS isOpen={isOpenHelp} setIsOpen={setIsOpenHelp} />
     </>
   );

@@ -30,11 +30,43 @@ export async function createGame(userId: string, languageId: string) {
 export async function getGame(gameId: string) {
   const game = await supabase
     .from('games')
-    .select('id,level,nb_points, users(id,username,email,type), languages(id,name,image)')
+    .select('id,level,nb_points, users(id,username,email,type), languages(id,name,image,iso_code)')
     .eq('id', gameId)
     .single()
     .throwOnError();
   return game.data;
+}
+
+export async function setGameUser({
+  id_game,
+  id_user,
+  id_language,
+  nb_po,
+  nb_pi,
+  level_points,
+  next_level,
+}: {
+  id_game: string;
+  id_user: string;
+  id_language: string;
+  nb_po: number;
+  nb_pi: number;
+  level_points: number;
+  next_level: number;
+}): Promise<boolean> {
+  const { data: goTonextLevel } = await supabase
+    .rpc('set_game_user', {
+      id_game,
+      id_user,
+      id_language,
+      nb_po,
+      nb_pi,
+      level_points,
+      next_level,
+    })
+    .throwOnError();
+
+  return goTonextLevel! || false;
 }
 
 export async function getUserGames(userId: string) {

@@ -5,8 +5,9 @@ import { loadable } from 'jotai/utils';
 import { useState } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { useToast } from 'react-native-toast-notifications';
-import { SizableText, XStack, YStack } from 'tamagui';
+import { XStack, YStack } from 'tamagui';
 
+import ErrorPage from '../components/ErrorPage';
 import Splash from '../components/Splash';
 import Button from '../components/form/Button';
 import Container from '../components/layout/Container';
@@ -47,12 +48,7 @@ export default function Page() {
     },
   });
 
-  if (error || userStorage.state === 'hasError')
-    return (
-      <Container justifyContent="center" alignItems="center">
-        <SizableText color="#fff">{error!.message || 'Une erreur est survenue'}</SizableText>
-      </Container>
-    );
+  if (error || userStorage.state === 'hasError') return <ErrorPage message={error!.message || 'Une erreur est survenue'} />;
 
   if (isPending || userStorage.state === 'loading') return <Splash />;
 

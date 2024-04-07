@@ -13,7 +13,7 @@ export async function getLevels() {
 export async function getLevelById(levelId: string) {
   const level = await supabase
     .from('levels')
-    .select('id,name,level,nb_points, languages(id,name,image)')
+    .select('id,name,level,nb_points, languages(id,name,image,iso_code)')
     .eq('id', levelId)
     .single()
     .throwOnError();
@@ -23,20 +23,20 @@ export async function getLevelById(levelId: string) {
 export async function getLevelsByLanguage(languageId: string) {
   const levels = await supabase
     .from('levels')
-    .select('id,name,level,nb_points, languages(id,name,image)')
+    .select('id,name,level,nb_points, languages(id,name,image,iso_code)')
     .eq('language_id', languageId)
     .order('name', { ascending: true })
     .throwOnError();
   return levels.data;
 }
 
-export async function getLevelByLevelAndLanguage(
-  props:{level: number,
-  language: string}
-): Promise<LevelProps> {
+export async function getLevelByLevelAndLanguage(props: {
+  level: number;
+  language: string;
+}): Promise<LevelProps> {
   const level = await supabase
     .from('levels')
-    .select('id,name,level,nb_points, languages(id,name,image)')
+    .select('id,name,level,nb_points, languages(id,name,image,iso_code)')
     .eq('level', props.level)
     .eq('language_id', props.language)
     .single()

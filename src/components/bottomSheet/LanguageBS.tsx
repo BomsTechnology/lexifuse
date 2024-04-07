@@ -6,41 +6,65 @@ import {
   BottomSheetFooterProps,
 } from '@gorhom/bottom-sheet';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo, useRef, useEffect, useState } from 'react';
-import { StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { SizableText, useTheme } from 'tamagui';
+import { StyleSheet } from 'react-native';
+import {  useTheme } from 'tamagui';
 
 import Button from '../form/Button';
+import LanguageItem from '../listItem/LanguageItem';
 
 import colors from '~/src/constants/colors';
-import LanguageItem from '../listItem/LanguageItem';
-import { useQuery } from '@tanstack/react-query';
+import { createGame } from '~/src/services/useGame';
 import { getLanguages } from '~/src/services/useLanguage';
+import { GameProps } from '~/src/types/GameProps';
 import { Database } from '~/src/types/database.types';
-import { useAtom } from 'jotai';
-import { currGameWithStorage, gamesWithStorage } from '~/src/utils/storage';
 
 type Language = Database['public']['Tables']['languages']['Row'];
+type User = Database['public']['Tables']['users']['Row'];
 const LanguageBS = ({
   isOpen,
   setIsOpen,
+  user,
+  currGameStorage,
+  gamesStorage,
+  setCurrGameStorage,
+  setGamesStorage,
 }: {
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
+  user: User;
+  currGameStorage: GameProps;
+  gamesStorage: GameProps[];
+  setCurrGameStorage: (value: GameProps) => void;
+  setGamesStorage: (value: GameProps[]) => void;
 }) => {
-  const [currGameStorage, setCurrGameStorage] = useAtom(currGameWithStorage);
-  const [, setGamesStorage] = useAtom(gamesWithStorage);
   const sheetRef = useRef<BottomSheetModal>(null);
   const theme = useTheme();
   const snapPoints = useMemo(() => ['35%'], []);
+  const selectedLanguage = useRef<Language>({
+    ...currGameStorage.languages!,
+    path: '',
+    created_at: '',
+    iso_code: '',
+  });
   const [selected, setSelected] = useState<Language>({
     ...currGameStorage.languages!,
     path: '',
     created_at: '',
+    iso_code: '',
   });
   const { data } = useQuery<Language[], Error>({
     queryKey: ['languages'],
     queryFn: getLanguages,
+  });
+  const mutationGame = useMutation({
+    mutationFn: () => createGame(user.id, selectedLanguage.current.id!),
+    onSuccess: (data) => {
+      setCurrGameStorage(data.game!);
+      setGamesStorage([...gamesStorage, data.game!]);
+      sheetRef.current?.dismiss();
+    },
   });
   const renderBackdrop = useCallback(
     (props: BottomSheetDefaultBackdropProps) => (
@@ -48,11 +72,22 @@ const LanguageBS = ({
         {...props}
         disappearsOnIndex={-1}
         appearsOnIndex={0}
-        pressBehavior="close"
+        pressBehavior={mutationGame.isPending ? 'none' : 'close'}
       />
     ),
     []
   );
+
+  const changeLanguage = async () => {
+    const isThere = gamesStorage.find((game) => game.languages?.id === selectedLanguage.current.id);
+    if (isThere) {
+      sheetRef.current?.dismiss();
+      setCurrGameStorage(isThere);
+    } else {
+      mutationGame.mutate();
+    }
+    
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -64,11 +99,10 @@ const LanguageBS = ({
     (props: BottomSheetFooterProps) => (
       <BottomSheetFooter {...props} style={{ paddingHorizontal: 15 }} bottomInset={10}>
         <Button
-          onPress={() => {
-            sheetRef.current?.dismiss();
-          }}
+          onPress={changeLanguage}
           backgroundColor={colors.blue1}
           borderBottomColor={colors.blue2}
+          loading={mutationGame.isPending}
           color="#fff"
           enterStyle={{ opacity: 0, y: 50 }}
           animation="bouncy">
@@ -83,7 +117,7 @@ const LanguageBS = ({
     <BottomSheetModal
       backgroundStyle={{ backgroundColor: theme.gray1.get() }}
       handleIndicatorStyle={{ backgroundColor: theme.gray12.get() }}
-      enablePanDownToClose
+      enablePanDownToClose={!mutationGame.isPending}
       ref={sheetRef}
       index={0}
       snapPoints={snapPoints}
@@ -101,9 +135,12 @@ const LanguageBS = ({
         numColumns={4}
         renderItem={({ item }) => (
           <LanguageItem
-          language={item}
-          active={selected?.id === item.id}
-          onPress={() => setSelected(item)}
+            language={item}
+            active={selected.id === item.id}
+            onPress={() => {
+              setSelected(item);
+              selectedLanguage.current = item;
+            }}
           />
         )}
         keyExtractor={(_, index) => index.toString()}

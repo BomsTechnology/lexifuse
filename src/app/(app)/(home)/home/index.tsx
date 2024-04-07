@@ -22,7 +22,7 @@ const Page = () => {
       <Container>
         <HomeHeader user={user} game={game} />
         <Main>
-          {!user.auth_id && (
+          {!user.auth_id && game.level > 1 && (
             <Link href={{ pathname: '/sign-in' }} asChild>
               <Button
                 backgroundColor={colors.orange1}
@@ -46,7 +46,7 @@ const Page = () => {
           </YStack>
 
           <YStack gap="$2" enterStyle={{ opacity: 0, y: 100 }} animation="bouncy">
-            {game.level > 1 && (
+            {game.level > 1 ? (
               <Button
                 onPress={() => setIsOldLevel(true)}
                 backgroundColor={colors.blue1}
@@ -54,8 +54,24 @@ const Page = () => {
                 color="#fff">
                 Niveaux antierieurs
               </Button>
+            ) : (
+              <Link href={{ pathname: '/sign-in' }} asChild>
+                <Button
+                  backgroundColor={colors.orange1}
+                  borderBottomColor={colors.orange2}
+                  color="#fff">
+                  <Ionicons name="person" size={20} color="#fff" />
+                  Se Connecter
+                </Button>
+              </Link>
             )}
-            <Link href={{ pathname: '/(app)/(game)/' }} replace asChild>
+            <Link
+              href={{
+                pathname: '/(app)/(game)/',
+                params: { level: game.level, language: game.languages?.id! },
+              }}
+              replace
+              asChild>
               <Button
                 backgroundColor={colors.green1}
                 borderBottomColor={colors.green2}

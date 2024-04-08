@@ -10,6 +10,7 @@ import HomeHeader from '~/src/components/header/HomeHeader';
 import Container from '~/src/components/layout/Container';
 import Main from '~/src/components/layout/Main';
 import colors from '~/src/constants/colors';
+import i18n from '~/src/i18n';
 import { currGameWithStorage, userWithStorage } from '~/src/utils/storage';
 import { Subtitle } from '~/tamagui.config';
 
@@ -29,7 +30,7 @@ const Page = () => {
                 borderBottomColor={colors.orange2}
                 color="#fff">
                 <Ionicons name="person" size={20} color="#fff" />
-                Se Connecter
+                {i18n.t('login')}
               </Button>
             </Link>
           )}
@@ -39,7 +40,7 @@ const Page = () => {
             flex={1}
             enterStyle={{ opacity: 0, scale: 0.5 }}
             animation="bouncy">
-            <Subtitle>Vous êtes au niveau :</Subtitle>
+            <Subtitle>{i18n.t('you_are_level')}</Subtitle>
             <H1 size="$14" color={colors.blue1}>
               {game.level}
             </H1>
@@ -52,7 +53,7 @@ const Page = () => {
                 backgroundColor={colors.blue1}
                 borderBottomColor={colors.blue2}
                 color="#fff">
-                Niveaux antierieurs
+                {i18n.t('previous_level')}
               </Button>
             ) : (
               <Link href={{ pathname: '/sign-in' }} asChild>
@@ -61,7 +62,7 @@ const Page = () => {
                   borderBottomColor={colors.orange2}
                   color="#fff">
                   <Ionicons name="person" size={20} color="#fff" />
-                  Se Connecter
+                  {i18n.t('login')}
                 </Button>
               </Link>
             )}
@@ -77,13 +78,18 @@ const Page = () => {
                 borderBottomColor={colors.green2}
                 color="#fff">
                 <Ionicons name="add-circle" size={28} color="#fff" />
-                Nouvelle Partie
+                {i18n.t('new_part')}
               </Button>
             </Link>
           </YStack>
         </Main>
       </Container>
-      <LevelBS isOpen={isOldLevel} level={game.level} setIsOpen={setIsOldLevel} />
+      <LevelBS
+        isOpen={isOldLevel}
+        level={game.level}
+        language={game.languages?.id!}
+        setIsOpen={setIsOldLevel}
+      />
     </>
   );
 };

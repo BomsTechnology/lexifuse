@@ -18,6 +18,7 @@ import Container from '~/src/components/layout/Container';
 import Main from '~/src/components/layout/Main';
 import colors from '~/src/constants/colors';
 import { intializeWordStep, answerBgColor, answerBorderColor } from '~/src/functions/setupWords';
+import i18n from '~/src/i18n';
 import { getWords } from '~/src/services/useWord';
 import WordProps from '~/src/types/WordProps';
 import { currGameWithStorage, settingsWithStorage, userWithStorage } from '~/src/utils/storage';
@@ -61,7 +62,7 @@ const Page = () => {
 
   const onValidate = () => {
     if (currentAnswer === '') {
-      toast.show('Veuillez sélectionner une réponse', {
+      toast.show(i18n.t('select_answer_error'), {
         type: 'danger',
         placement: 'top',
       });
@@ -86,6 +87,8 @@ const Page = () => {
   };
 
   const goNext = () => {
+    setIsOpenSheetKind(false);
+    setIsOpenSheetAnswer(false);
     if (currentStep.current < 10) {
       setIsValid(false);
       setIsError(false);
@@ -93,10 +96,7 @@ const Page = () => {
       setCurrentAnswer('');
       pageView.current?.setPage(currentStep.current);
       currentStep.current = currentStep.current + 1;
-      setIsOpenSheetKind(false);
     } else if (currentStep.current === 10) {
-      setIsOpenSheetKind(false);
-      setIsOpenSheetAnswer(false);
       router.replace({ pathname: '/finish', params: { nbTrueAnswer: nbTrueAnswer.current } });
     }
   };
@@ -109,7 +109,7 @@ const Page = () => {
       }));
       setUse50(true);
     } else {
-      toast.show("Vous n'avez pas assez de pieces", {
+      toast.show(i18n.t('piece_error'), {
         type: 'danger',
         placement: 'top',
       });
@@ -124,19 +124,19 @@ const Page = () => {
       }));
       setIsOpenSheetAnswer(true);
     } else {
-      toast.show("Vous n'avez pas assez de pieces", {
+      toast.show(i18n.t('piece_error'), {
         type: 'danger',
         placement: 'top',
       });
     }
   };
 
-  if (error) return <ErrorPage message={error.message || 'Une erreur est survenue'} button />;
+  if (error) return <ErrorPage message={error.message || i18n.t('default_error_msg')} button />;
   if (isPending || gameTable.length === 0) return <Loading />;
   return (
     <>
       <Container>
-        <GameHeader user={user} game={game} step={currentStep.current} />
+        <GameHeader user={user} game={game} level={level as string} step={currentStep.current} />
         <Main justifyContent="space-between" pt={35}>
           <YStack enterStyle={{ opacity: 0, scale: 0.5 }} animation="bouncy" flex={1}>
             {gameTable.length > 0 && (
@@ -144,7 +144,7 @@ const Page = () => {
                 {gameTable.map((item, i) => (
                   <YStack mt={15} flex={1} key={i + 1}>
                     <SizableText textAlign="center" fontWeight="600" fontSize={20}>
-                      Quel est le synonyme de:
+                      {i18n.t('question_title')}
                     </SizableText>
                     <H2 textAlign="center" color={colors.blue1} mb={20}>
                       {item.word}
@@ -179,14 +179,14 @@ const Page = () => {
                             index
                           )}
                           textColor={
-                            use50 && item.answer !== stepWord && index < 3
+                            use50 && item.answer !== stepWord && index < 2
                               ? colors.gray3
                               : currentAnswer !== '' && currentAnswer === stepWord
                                 ? '#fff'
                                 : colors.orange1
                           }
                           key={index}
-                          disabled={isValid || (use50 && item.answer !== stepWord && index < 3)}
+                          disabled={isValid || (use50 && item.answer !== stepWord && index < 2)}
                           icon={
                             isValid && isError && currentAnswer === stepWord
                               ? 'cross'
@@ -215,7 +215,7 @@ const Page = () => {
               />
               <BonusButton
                 onPress={bonusAnswer}
-                text="réponse"
+                text={i18n.t('answer')}
                 pieces="4"
                 icon={<Ionicons name="bulb" size={24} color="#fff" />}
               />
@@ -226,10 +226,10 @@ const Page = () => {
               color="#fff"
               onPress={() => onValidate()}>
               {isValid && currentStep.current === gameTable.length
-                ? 'Partie terminée !'
+                ? i18n.t('finish_part')
                 : isValid
-                  ? 'Suivant'
-                  : 'Valider'}
+                  ? i18n.t('next')
+                  : i18n.t('validate')}
             </Button>
           </YStack>
         </Main>
@@ -248,9 +248,7 @@ const Page = () => {
             : ''
         }
         buttonAction={() => goNext()}
-        textButton={
-          isValid && currentStep.current === gameTable.length ? 'Partie terminée !' : 'Suivant'
-        }
+        textButton={isValid && currentStep.current === 10 ? i18n.t('finish_part') : i18n.t('next')}
       />
 
       <BonusBS

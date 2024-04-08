@@ -19,9 +19,7 @@ const HomeHeader = ({ user, game }: { user: UserProps; game: GameProps }) => {
       enterStyle={{ opacity: 0 }}
       animation="bouncy">
       <ProgressLevel
-        progression={game.nb_points}
-        level={game.level}
-        language={game.languages!.id}
+        
       />
       <YStack gap="$1" alignItems="flex-end">
         <Image source={{ uri: game.languages!.image }} style={{ width: 20, height: 12 }} />

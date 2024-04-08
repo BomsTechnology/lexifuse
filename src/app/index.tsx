@@ -17,9 +17,10 @@ import colors from '../constants/colors';
 import { createGame } from '../services/useGame';
 import { getLanguages } from '../services/useLanguage';
 import { Database } from '../types/database.types';
-import { currGameWithStorage, gamesWithStorage, userWithStorage } from '../utils/storage';
+import { currGameWithStorage, gamesWithStorage, settingsWithStorage, userWithStorage } from '../utils/storage';
 
 import { Subtitle, Title } from '~/tamagui.config';
+import i18n from '../i18n';
 
 type Language = Database['public']['Tables']['languages']['Row'];
 const asyncAtom = atom(async (get) => get(userWithStorage));
@@ -27,6 +28,7 @@ const loadableAtom = loadable(asyncAtom);
 
 export default function Page() {
   const toast = useToast();
+  const [settings, setSettings] = useAtom(settingsWithStorage);
   const [, setUserStorage] = useAtom(userWithStorage);
   const [, setCurrGameStorage] = useAtom(currGameWithStorage);
   const [, setGamesStorage] = useAtom(gamesWithStorage);
@@ -41,19 +43,20 @@ export default function Page() {
   const mutationGame = useMutation({
     mutationFn: (userId: string) => createGame(userId, selected?.id!),
     onSuccess: (data) => {
+
       setCurrGameStorage(data.game!);
       setUserStorage(data.user!);
       setGamesStorage([data.game!]);
+      setSettings({ ...settings, language: selected?.iso_code! });
       router.replace('/(app)/(home)/home/');
     },
   });
 
-  if (error || userStorage.state === 'hasError') return <ErrorPage message={error!.message || 'Une erreur est survenue'} />;
+  if (error || userStorage.state === 'hasError') return <ErrorPage message={error!.message || i18n.t('default_error_msg')} />;
 
   if (isPending || userStorage.state === 'loading') return <Splash />;
 
   if (userStorage.data.id !== '') {
-    console.log('userStorage.data.id', userStorage.data);
     return <Redirect href="/(app)/(home)/home" />;
   }
   const start = () => {
@@ -70,8 +73,8 @@ export default function Page() {
     <Container>
       <Main justifyContent="space-between" gap="$5" borderRadius={0} mt={0}>
         <YStack>
-          <Title>Langue</Title>
-          <Subtitle mt="$2">Selectionnez votre langue de jeu.</Subtitle>
+          <Title>{i18n.t('language')}</Title>
+          <Subtitle mt="$2">{i18n.t('select_language')}</Subtitle>
         </YStack>
         <YStack>
           <FlatList
@@ -85,7 +88,10 @@ export default function Page() {
                 active={selected?.id === item.id}
                 width={80}
                 height={60}
-                onPress={() => setSelected(item)}
+                onPress={() => {
+                  i18n.locale = item.iso_code!.toLowerCase();
+                  setSelected(item);
+                }}
               />
             )}
             keyExtractor={(_, index) => index.toString()}
@@ -94,9 +100,9 @@ export default function Page() {
 
         <YStack gap="$3">
           <XStack justifyContent="center" flexWrap="wrap" gap="$2">
-            <Subtitle color="$gray12">J'ai deja un compte,</Subtitle>
+            <Subtitle color="$gray12">{i18n.t('have_account')},</Subtitle>
             <Link href={{ pathname: `/(app)/sign-in` }} asChild>
-              <Subtitle color={colors.blue1}>me connecter</Subtitle>
+              <Subtitle color={colors.blue1}>{i18n.t('login')}</Subtitle>
             </Link>
           </XStack>
 
@@ -107,7 +113,7 @@ export default function Page() {
             loading={mutationGame.isPending}
             disabled={mutationGame.isPending}
             color="#fff">
-            Start
+            {i18n.t('start')}
           </Button>
         </YStack>
       </Main>

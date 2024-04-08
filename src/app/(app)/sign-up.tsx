@@ -3,6 +3,8 @@ import { Link } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { YStack, XStack, useTheme } from 'tamagui';
 
+import i18n from '../../i18n/index';
+
 import Button from '~/src/components/form/Button';
 import Input from '~/src/components/form/Input';
 import Container from '~/src/components/layout/Container';
@@ -16,34 +18,40 @@ export default function SignUp() {
     <Container bg="$gray1">
       <Main justifyContent="space-between" borderRadius={0} mt={0}>
         <YStack enterStyle={{ opacity: 0, scale: 0.5 }} animation="bouncy">
-          <Title>Inscription</Title>
+          <Title>{i18n.t('register_title')}</Title>
           <Subtitle mt="$2">Entrez vos identifiants pour créer un compte.</Subtitle>
           <YStack bg="$gray5" p="$4" borderRadius="$10" my="$5" gap="$2">
             <Input
               backgroundColor="$gray1"
-              placeholder="Nom d'utilisateur"
+              placeholder={i18n.t('username')}
               color="$gray12"
               icon={<Ionicons name="person" size={20} color={theme.gray9.get()} />}
             />
             <Input
               backgroundColor="$gray1"
-              placeholder="Mot de passe"
+              placeholder={i18n.t('email')}
+              color="$gray12"
+              icon={<Ionicons name="at" size={20} color={theme.gray9.get()} />}
+            />
+            <Input
+              backgroundColor="$gray1"
+              placeholder={i18n.t('password')}
               color="$gray12"
               secureTextEntry
               icon={<Ionicons name="lock-closed" size={20} color={theme.gray9.get()} />}
             />
             <Input
               backgroundColor="$gray1"
-              placeholder="Confirmer le mot de passe"
+              placeholder={i18n.t('confirm_password')}
               color="$gray12"
               secureTextEntry
               icon={<Ionicons name="lock-closed" size={20} color={theme.gray9.get()} />}
             />
           </YStack>
           <XStack flexWrap="wrap" gap="$2">
-            <Subtitle color="$gray12">J'ai deja un compte,</Subtitle>
+            <Subtitle color="$gray12">{i18n.t('have_account')},</Subtitle>
             <Link href={{ pathname: '/home/' }} asChild>
-              <Subtitle color={colors.blue1}>me connecter</Subtitle>
+              <Subtitle color={colors.blue1}>{i18n.t('login')}</Subtitle>
             </Link>
           </XStack>
         </YStack>
@@ -54,7 +62,7 @@ export default function SignUp() {
             color="#fff"
             enterStyle={{ opacity: 0, y: 50 }}
             animation="bouncy">
-            S'inscrire
+            {i18n.t('register')}
           </Button>
         </Link>
       </Main>

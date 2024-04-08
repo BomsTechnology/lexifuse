@@ -3,6 +3,8 @@ import { Link } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { YStack, XStack, useTheme } from 'tamagui';
 
+import i18n from '../../i18n/index';
+
 import Button from '~/src/components/form/Button';
 import Input from '~/src/components/form/Input';
 import Container from '~/src/components/layout/Container';
@@ -16,27 +18,27 @@ export default function SingIn() {
     <Container bg="$gray1">
       <Main justifyContent="space-between" borderRadius={0} mt={0}>
         <YStack enterStyle={{ opacity: 0, scale: 0.5 }} animation="bouncy">
-          <Title>Connexion</Title>
-          <Subtitle mt="$2">Entrez vos identifiants pour accéder à votre compte.</Subtitle>
+          <Title>{i18n.t('login_title')}</Title>
+          <Subtitle mt="$2">{i18n.t('login_subtitle')}</Subtitle>
           <YStack bg="$gray5" p="$4" borderRadius="$10" my="$5" gap="$2">
             <Input
               backgroundColor="$gray1"
-              placeholder="Nom d'utilisateur"
+              placeholder={i18n.t('email')}
               color="$gray12"
-              icon={<Ionicons name="person" size={20} color={theme.gray9.get()} />}
+              icon={<Ionicons name="at" size={20} color={theme.gray9.get()} />}
             />
             <Input
               backgroundColor="$gray1"
-              placeholder="Mot de passe"
+              placeholder={i18n.t('password')}
               color="$gray12"
               secureTextEntry
               icon={<Ionicons name="lock-closed" size={20} color={theme.gray9.get()} />}
             />
           </YStack>
           <XStack flexWrap="wrap" gap="$2">
-            <Subtitle color="$gray12">Je n'ai pas de compte,</Subtitle>
+            <Subtitle color="$gray12">{i18n.t('no_account')},</Subtitle>
             <Link href={{ pathname: '/sign-up' }} asChild>
-              <Subtitle color={colors.blue1}>m'inscrire</Subtitle>
+              <Subtitle color={colors.blue1}>{i18n.t('register')}</Subtitle>
             </Link>
           </XStack>
         </YStack>
@@ -47,7 +49,7 @@ export default function SingIn() {
             color="#fff"
             enterStyle={{ opacity: 0, y: 50 }}
             animation="bouncy">
-            Se connecter
+            {i18n.t('login')}
           </Button>
         </Link>
       </Main>

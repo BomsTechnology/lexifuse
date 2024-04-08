@@ -209,18 +209,35 @@ export type Database = {
           word3: string
         }[]
       }
-      set_game_user: {
+      go_to_next_level: {
         Args: {
-          id_game: string
-          id_user: string
           id_language: string
-          nb_po: number
-          nb_pi: number
-          level_points: number
           next_level: number
         }
         Returns: boolean
       }
+      set_game_user:
+        | {
+            Args: {
+              id_game: string
+              id_user: string
+              id_language: string
+              nb_po: number
+              nb_pi: number
+              level_points: number
+              next_level: number
+            }
+            Returns: boolean
+          }
+        | {
+            Args: {
+              id_game: string
+              id_user: string
+              nb_po: number
+              nb_pi: number
+            }
+            Returns: undefined
+          }
     }
     Enums: {
       [_ in never]: never

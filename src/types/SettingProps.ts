@@ -4,6 +4,6 @@ export default interface SettingProps {
   sound: boolean;
   theme: ThemeName;
   notification: boolean;
-  language: 'fr' | 'en';
+  language: string;
   library: boolean;
 }

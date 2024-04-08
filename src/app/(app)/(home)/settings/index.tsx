@@ -14,6 +14,7 @@ import SettingListItem from '~/src/components/listItem/SettingListItem';
 import SettingListItemWithSwitch from '~/src/components/listItem/SettingListItemWithSwitch';
 import CustomModal from '~/src/components/modal/CustomModal';
 import colors from '~/src/constants/colors';
+import i18n from '~/src/i18n';
 import { queryClient } from '~/src/utils/queryClient';
 import {
   currGameWithStorage,
@@ -47,21 +48,21 @@ const Page = () => {
           <ScrollView contentContainerStyle={{ padding: 10 }} showsVerticalScrollIndicator={false}>
             <YStack enterStyle={{ opacity: 0, y: 50 }} animation="bouncy">
               <SizableText fontWeight="600" fontSize={18}>
-                Options
+                {i18n.t('options')}
               </SizableText>
               <YStack gap={7} p={18} bg="$gray5" borderRadius="$10" mt={15}>
                 {user.auth_id && (
                   <SettingListItem
                     onPress={() => setIsOpenEditProfil(true)}
                     icon={<Ionicons name="person" size={20} color={colors.blue1} />}
-                    text="Nom d'utilisateur"
+                    text={i18n.t('username')}
                     rightText={user.username!}
                   />
                 )}
                 <SettingListItem
                   onPress={() => setIsOpenLanguage(true)}
                   icon={<Ionicons name="language-sharp" size={20} color={colors.green1} />}
-                  text="Langue de jeu"
+                  text={i18n.t('game_language')}
                   rightText={currGameStorage.languages?.name}
                 />
                 <SettingListItemWithSwitch
@@ -72,7 +73,7 @@ const Page = () => {
                       color={theme.gray10.get()}
                     />
                   }
-                  text="Sons"
+                  text={i18n.t('sound')}
                   onValueChange={() => setSettings({ ...settings, sound: !settings.sound })}
                   value={settings.sound}
                 />
@@ -84,7 +85,7 @@ const Page = () => {
                       color={theme.gray10.get()}
                     />
                   }
-                  text={`Theme ${settings.theme === 'dark' ? 'Sombre' : 'Clair'}`}
+                  text={`${i18n.t('theme')} ${settings.theme === 'dark' ? i18n.t('dark') : i18n.t('light')}`}
                   onValueChange={() =>
                     setSettings({
                       ...settings,
@@ -95,7 +96,7 @@ const Page = () => {
                 />
                 <SettingListItemWithSwitch
                   icon={<Ionicons name="notifications" size={20} color={theme.gray10.get()} />}
-                  text="Notifications"
+                  text={i18n.t('notifications')}
                   onValueChange={() =>
                     setSettings({ ...settings, notification: !settings.notification })
                   }
@@ -103,7 +104,7 @@ const Page = () => {
                 />
                 <SettingListItemWithSwitch
                   icon={<Ionicons name="book" size={20} color={theme.gray10.get()} />}
-                  text="Dictionnaire"
+                  text={i18n.t('dictionary')}
                   onValueChange={() => setSettings({ ...settings, library: !settings.library })}
                   value={settings.library}
                 />
@@ -112,16 +113,16 @@ const Page = () => {
 
             <YStack enterStyle={{ opacity: 0, y: 50 }} animation="bouncy">
               <SizableText fontWeight="600" fontSize={18} mt={30}>
-                Partager
+                {i18n.t('share')}
               </SizableText>
               <YStack gap={7} p={18} bg="$gray5" borderRadius="$10" mt={15}>
                 <SettingListItem
                   icon={<Ionicons name="star" size={20} color={colors.orange1} />}
-                  text="Evaluer Lexifuse"
+                  text={i18n.t('evalute', { name: 'SidoLex' })}
                 />
                 <SettingListItem
                   icon={<Ionicons name="arrow-redo-sharp" size={20} color={colors.blue1} />}
-                  text="Inviter des amis"
+                  text={i18n.t('invite_friends')}
                   onPress={async () => await Sharing.shareAsync('https://lexifuse.com')}
                 />
               </YStack>
@@ -132,7 +133,7 @@ const Page = () => {
                 <SettingListItem
                   onPress={() => setIsOpenHelp(true)}
                   icon={<Ionicons name="help" size={20} color={colors.green1} />}
-                  text="Aide"
+                  text={i18n.t('help')}
                 />
 
                 {user.auth_id && (

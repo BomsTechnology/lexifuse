@@ -1,34 +1,46 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useAtom } from 'jotai';
 import { useEffect } from 'react';
 import { Image, View, StyleSheet } from 'react-native';
 import Animated, { useSharedValue, withSpring, useAnimatedStyle } from 'react-native-reanimated';
 import { SizableText, XStack } from 'tamagui';
 
 import colors from '../constants/colors';
-import { getLevelByLevelAndLanguage } from '../services/useLevel';
+import { getLevelByLevelAndLanguage, goToNextLevel } from '../services/useLevel';
 import { LevelProps } from '../types/LevelProps';
+import { currGameWithStorage } from '../utils/storage';
 
-const ProgressLevel = ({
-  progression,
-  level,
-  language,
-}: {
-  progression: number;
-  level: number;
-  language: string;
-}) => {
+const ProgressLevel = () => {
+  const [game, setGame] = useAtom(currGameWithStorage);
+  const mutationGame = useMutation({
+    mutationFn: () =>
+      goToNextLevel({
+        id_language: game.languages!.id,
+        next_level: game.level + 1,
+      }),
+    onSuccess: (data) => {
+      if (data) {
+        setGame({
+          ...game,
+          level: game.level + 1,
+        });
+        refetch();
+      }
+    },
+  });
   const progress = useSharedValue(0);
 
-  const { data } = useQuery<LevelProps, Error>({
+  const { data, refetch } = useQuery<LevelProps, Error>({
     queryKey: ['current_level'],
     queryFn: () => {
-      return getLevelByLevelAndLanguage({ level, language });
+      return getLevelByLevelAndLanguage({ level: game.level, language: game.languages!.id });
     },
   });
 
   useEffect(() => {
-    progress.value = withSpring(progression);
-  }, [progression]);
+    progress.value = withSpring(game.nb_points);
+    mutationGame.mutate();
+  }, [game]);
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
@@ -39,7 +51,7 @@ const ProgressLevel = ({
     <XStack bg="#fff" width={120} py="$1" px="$1" borderRadius="$8" position="relative">
       <View style={styles.textContainer}>
         <SizableText color="#fff" size="$2" fontFamily="$heading" textAlign="center">
-          {progression}/{data?.nb_points}
+          {game.nb_points}/{data?.nb_points}
         </SizableText>
       </View>
       <XStack bg={colors.blue3} w="100%" borderRadius="$8" h="$1" overflow="hidden">
@@ -49,7 +61,7 @@ const ProgressLevel = ({
         <XStack position="relative">
           <View style={styles.textContainer}>
             <SizableText color="#fff" size="$3" textAlign="center" fontFamily="$heading">
-              {level}
+              {game.level}
             </SizableText>
           </View>
 

@@ -7,6 +7,7 @@ import Piece from '../Piece';
 import colors from '~/src/constants/colors';
 import { Database } from '~/src/types/database.types';
 import { currGameWithStorage } from '~/src/utils/storage';
+import i18n from '~/src/i18n';
 
 const SettingHeader = ({ user }: { user: Database['public']['Tables']['users']['Row'] }) => {
   const [game] = useAtom(currGameWithStorage);
@@ -30,7 +31,7 @@ const SettingHeader = ({ user }: { user: Database['public']['Tables']['users']['
             {user.username}
           </H5>
           <SizableText color={colors.gray2} fontWeight="600">
-            Niveau {game.level}
+            {i18n.t('level', { level: game.level })}
           </SizableText>
         </YStack>
       </XStack>

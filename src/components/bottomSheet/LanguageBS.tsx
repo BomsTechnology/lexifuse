@@ -9,7 +9,7 @@ import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typesc
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo, useRef, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
-import {  useTheme } from 'tamagui';
+import { useTheme } from 'tamagui';
 
 import Button from '../form/Button';
 import LanguageItem from '../listItem/LanguageItem';
@@ -19,6 +19,9 @@ import { createGame } from '~/src/services/useGame';
 import { getLanguages } from '~/src/services/useLanguage';
 import { GameProps } from '~/src/types/GameProps';
 import { Database } from '~/src/types/database.types';
+import i18n from '~/src/i18n';
+import { useAtom } from 'jotai';
+import { settingsWithStorage } from '~/src/utils/storage';
 
 type Language = Database['public']['Tables']['languages']['Row'];
 type User = Database['public']['Tables']['users']['Row'];
@@ -39,6 +42,7 @@ const LanguageBS = ({
   setCurrGameStorage: (value: GameProps) => void;
   setGamesStorage: (value: GameProps[]) => void;
 }) => {
+  const [settings, setSettings] = useAtom(settingsWithStorage);
   const sheetRef = useRef<BottomSheetModal>(null);
   const theme = useTheme();
   const snapPoints = useMemo(() => ['35%'], []);
@@ -46,13 +50,11 @@ const LanguageBS = ({
     ...currGameStorage.languages!,
     path: '',
     created_at: '',
-    iso_code: '',
   });
   const [selected, setSelected] = useState<Language>({
     ...currGameStorage.languages!,
     path: '',
     created_at: '',
-    iso_code: '',
   });
   const { data } = useQuery<Language[], Error>({
     queryKey: ['languages'],
@@ -86,7 +88,8 @@ const LanguageBS = ({
     } else {
       mutationGame.mutate();
     }
-    
+    i18n.locale = selectedLanguage.current.iso_code!;
+    setSettings({ ...settings, language: selectedLanguage.current.iso_code! });
   };
 
   useEffect(() => {
@@ -106,7 +109,7 @@ const LanguageBS = ({
           color="#fff"
           enterStyle={{ opacity: 0, y: 50 }}
           animation="bouncy">
-          Changer
+          {i18n.t('change')}
         </Button>
       </BottomSheetFooter>
     ),

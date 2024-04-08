@@ -30,6 +30,22 @@ export async function getLevelsByLanguage(languageId: string) {
   return levels.data;
 }
 
+export async function goToNextLevel({
+  id_language,
+  next_level,
+}: {
+  id_language: string;
+  next_level: number;
+}): Promise<boolean> {
+  const { data: goTonextLevel } = await supabase
+    .rpc('go_to_next_level', {
+      id_language,
+      next_level,
+    })
+    .throwOnError();
+  return goTonextLevel! || false;
+}
+
 export async function getLevelByLevelAndLanguage(props: {
   level: number;
   language: string;

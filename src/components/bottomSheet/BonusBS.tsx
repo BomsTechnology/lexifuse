@@ -12,6 +12,7 @@ import { H3, SizableText, XStack, useTheme } from 'tamagui';
 import Button from '../form/Button';
 
 import colors from '~/src/constants/colors';
+import i18n from '~/src/i18n';
 
 const BonusBS = ({
   isOpen,
@@ -56,7 +57,7 @@ const BonusBS = ({
           color="#fff"
           enterStyle={{ opacity: 0, y: 50 }}
           animation="bouncy">
-          Fermer
+          {i18n.t('close')}
         </Button>
       </BottomSheetFooter>
     ),
@@ -80,11 +81,11 @@ const BonusBS = ({
       <BottomSheetScrollView
         contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 100, alignItems: 'center' }}>
         <H3 textAlign="center" color={theme.gray12.get()}>
-          Réponse
+        {i18n.t('answer')}
         </H3>
         <XStack alignItems="center" mt={20} gap="$2" flexWrap="wrap" justifyContent="center">
           <SizableText fontWeight="600" color={theme.gray12.get()} textAlign="center">
-            la bonne réponse est:
+          {i18n.t('answer_is')}
           </SizableText>
           <SizableText
             fontWeight="600"

@@ -1,9 +1,9 @@
 import { getLocales } from 'expo-localization';
 
 import { atomWithMMKV } from './atomWithMMKV';
+import { GameProps } from '../types/GameProps';
 import SettingProps from '../types/SettingProps';
 import { Database } from '../types/database.types';
-import { GameProps } from '../types/GameProps';
 
 export const settingsWithStorage = atomWithMMKV<SettingProps>('settings', {
   sound: true,

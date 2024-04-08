@@ -10,6 +10,7 @@ import Container from '~/src/components/layout/Container';
 import Main from '~/src/components/layout/Main';
 import RankingItem from '~/src/components/listItem/RankingItem';
 import colors from '~/src/constants/colors';
+import i18n from '~/src/i18n';
 import { userWithStorage } from '~/src/utils/storage';
 import { Subtitle, Title } from '~/tamagui.config';
 
@@ -23,7 +24,7 @@ const Page = () => {
   return (
     <Container>
       <Title color="#fff" textAlign="center" mt={20} enterStyle={{ opacity: 0 }} animation="bouncy">
-        Classement
+        {i18n.t('ranking')}
       </Title>
       <Main>
         <YStack enterStyle={{ opacity: 0, scale: 0.5 }} animation="bouncy" flex={1}>
@@ -48,9 +49,7 @@ const Page = () => {
             />
           ) : (
             <YStack justifyContent="center" alignItems="center" gap="$5" flex={1}>
-              <Subtitle textAlign="center">
-                Connectez-vous à votre compte pour voir votre classement.
-              </Subtitle>
+              <Subtitle textAlign="center">{i18n.t('ranking_no_login')}</Subtitle>
               <Link href={{ pathname: '/sign-in' }} asChild>
                 <Button
                   backgroundColor={colors.orange1}
@@ -58,7 +57,7 @@ const Page = () => {
                   color="#fff"
                   w="100%">
                   <Ionicons name="person" size={20} color="#fff" />
-                  Se Connecter
+                  {i18n.t('login')}
                 </Button>
               </Link>
             </YStack>

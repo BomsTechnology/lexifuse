@@ -4,6 +4,7 @@ import { SizableText, XStack, YStack } from 'tamagui';
 import Container from './layout/Container';
 import Main from './layout/Main';
 import colors from '../constants/colors';
+import i18n from '../i18n';
 
 const Loading = () => {
   return (
@@ -16,16 +17,16 @@ const Loading = () => {
         <YStack flex={1} justifyContent="center" alignItems="center" gap="$5">
           <XStack alignItems="center">
             <SizableText color="#fff" size="$10" fontFamily="$heading">
-              Lexi
+              Sido
             </SizableText>
             <SizableText fontWeight="600" fontSize={50} lineHeight={80} color={colors.orange1}>
-              Fuse
+              Lex
             </SizableText>
           </XStack>
           <ActivityIndicator size="large" color="#fff" />
         </YStack>
         <SizableText color="#fff" fontFamily="$heading">
-          Chargement...
+          {i18n.t('loading')}...
         </SizableText>
       </Main>
     </Container>

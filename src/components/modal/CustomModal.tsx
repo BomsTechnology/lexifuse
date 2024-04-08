@@ -31,6 +31,7 @@ const CustomModal = (props: ConfirmModalProps) => {
         />
         <AlertDialog.Content
           maxWidth="90%"
+          minWidth="75%"
           borderRadius={30}
           p={30}
           elevate

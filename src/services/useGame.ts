@@ -54,19 +54,25 @@ export async function setGameUser({
   level_points: number;
   next_level: number;
 }): Promise<boolean> {
-  const { data: goTonextLevel } = await supabase
+  await supabase
     .rpc('set_game_user', {
       id_game,
       id_user,
-      id_language,
       nb_po,
       nb_pi,
-      level_points,
-      next_level,
     })
     .throwOnError();
-
-  return goTonextLevel! || false;
+  if (nb_po > level_points) {
+    const { data: goTonextLevel } = await supabase
+      .rpc('go_to_next_level', {
+        id_language,
+        next_level,
+      })
+      .throwOnError();
+    return goTonextLevel! || false;
+  } else {
+    return false;
+  }
 }
 
 export async function getUserGames(userId: string) {

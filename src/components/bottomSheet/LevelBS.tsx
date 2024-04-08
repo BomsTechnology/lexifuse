@@ -6,25 +6,30 @@ import {
   BottomSheetFooterProps,
 } from '@gorhom/bottom-sheet';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
-import { useCallback, useMemo, useRef, useEffect } from 'react';
+import { Link } from 'expo-router';
+import { useCallback, useMemo, useRef, useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { H2, useTheme } from 'tamagui';
 
 import Button from '../form/Button';
 
 import colors from '~/src/constants/colors';
+import i18n from '~/src/i18n';
 
 const LevelBS = ({
   isOpen,
   setIsOpen,
   level,
+  language,
 }: {
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
   level: number;
+  language: string;
 }) => {
   const sheetRef = useRef<BottomSheetModal>(null);
   const theme = useTheme();
+  const [selectedLevel, setSelectedLevel] = useState(level - 1);
   const snapPoints = useMemo(() => ['35%'], []);
 
   const levels = Array.from({ length: level - 1 }, (_, i) => i + 1);
@@ -50,24 +55,35 @@ const LevelBS = ({
   const renderFooter = useCallback(
     (props: BottomSheetFooterProps) => (
       <BottomSheetFooter {...props} style={{ paddingHorizontal: 15 }} bottomInset={10}>
-        <Button
-          backgroundColor={colors.blue1}
-          borderBottomColor={colors.blue2}
-          color="#fff"
-          enterStyle={{ opacity: 0, y: 50 }}
-          animation="bouncy">
-          Lancer la partie
-        </Button>
+        <Link
+          href={{
+            pathname: '/(app)/(game)/',
+            params: { level: selectedLevel, language },
+          }}
+          replace
+          asChild>
+          <Button
+            backgroundColor={colors.blue1}
+            borderBottomColor={colors.blue2}
+            color="#fff"
+            enterStyle={{ opacity: 0, y: 50 }}
+            animation="bouncy">
+            {i18n.t('start_part')}
+          </Button>
+        </Link>
       </BottomSheetFooter>
     ),
     []
   );
 
-  const LanguageItem = ({ level, active }: { level: string; active: boolean }) => {
+  const Item = ({ l, active }: { l: string; active: boolean }) => {
     return (
       <TouchableOpacity
+        onPress={() => {
+          setSelectedLevel(Number(l));
+        }}
         style={[styles.bloc, { borderColor: active ? colors.blue1 : theme.gray10.get() }]}>
-        <H2 color={active ? colors.blue1 : '$gray10'}>{level}</H2>
+        <H2 color={active ? colors.blue1 : '$gray10'}>{l}</H2>
       </TouchableOpacity>
     );
   };
@@ -93,7 +109,7 @@ const LevelBS = ({
         style={{ flex: 1 }}
         numColumns={4}
         renderItem={({ item, index }) => (
-          <LanguageItem level={(index + 1).toString()} active={index === 0} />
+          <Item l={(index + 1).toString()} active={index + 1 === selectedLevel} />
         )}
         keyExtractor={(_, index) => index.toString()}
       />

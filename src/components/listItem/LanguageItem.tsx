@@ -2,6 +2,7 @@ import { TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { SizableText } from 'tamagui';
 
 import colors from '~/src/constants/colors';
+import i18n from '~/src/i18n';
 import { Database } from '~/src/types/database.types';
 type LanguageItemProps = {
   language: Database['public']['Tables']['languages']['Row'];
@@ -26,7 +27,7 @@ const LanguageItem = ({ language, active, width, height, onPress }: LanguageItem
         resizeMode="cover"
       />
       <SizableText fontWeight="600" color={active ? colors.blue1 : '$gray10'}>
-        {language.name}
+        {i18n.t(language.name.toLowerCase())}
       </SizableText>
     </TouchableOpacity>
   );

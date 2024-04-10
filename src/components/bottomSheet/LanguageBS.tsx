@@ -22,6 +22,7 @@ import { Database } from '~/src/types/database.types';
 import i18n from '~/src/i18n';
 import { useAtom } from 'jotai';
 import { settingsWithStorage } from '~/src/utils/storage';
+import { useToast } from 'react-native-toast-notifications';
 
 type Language = Database['public']['Tables']['languages']['Row'];
 type User = Database['public']['Tables']['users']['Row'];
@@ -42,6 +43,7 @@ const LanguageBS = ({
   setCurrGameStorage: (value: GameProps) => void;
   setGamesStorage: (value: GameProps[]) => void;
 }) => {
+  const toast = useToast();
   const [settings, setSettings] = useAtom(settingsWithStorage);
   const sheetRef = useRef<BottomSheetModal>(null);
   const theme = useTheme();
@@ -66,6 +68,12 @@ const LanguageBS = ({
       setCurrGameStorage(data.game!);
       setGamesStorage([...gamesStorage, data.game!]);
       sheetRef.current?.dismiss();
+    },
+    onError: (error) => {
+      toast.show(error.message || i18n.t('default_error_msg'), {
+        type: 'danger',
+        placement: 'top',
+      });
     },
   });
   const renderBackdrop = useCallback(

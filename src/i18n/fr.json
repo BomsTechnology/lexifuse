@@ -32,6 +32,7 @@
         "comming_soon": "Arrive bientôt",
         "options": "Options",
         "logout": "Deconnexion",
+        "logout_message": "Voulez-vous vous deconnecter de votre compte ?",
         "game_language": "Langue de jeu",
         "sound": "Son",
         "notifications": "Notifications",
@@ -76,6 +77,8 @@
         "required_error": "%{field} est requis",
         "email_error": "Veuillez entrer une adresse email valide",
         "confirm_pass_error": "Les mot de passe doivent être identiques",
+        "min_length_error": "%{field} doit contenir au moins %{min} caractères",
+        "max_length_error": "%{field} doit contenir au plus %{min} caractères",
         "select_answer_error": "Veuillez sélectionner une réponse",
         "select_language_error": "Veuillez sélectionner une langue",
         "default_error_msg": "Une erreur s'est produite, veuillez reessayer",
@@ -84,6 +87,12 @@
         "won_points": "Points gagnés:",
         "won_next_level": "Niveau suivant",
         "bad_answer": "Mauvaises réponses:",
-        "good_answer": "Bonnes réponses:"
+        "good_answer": "Bonnes réponses:",
+        "account_created": "Compte crée avec succes",
+        "edit": "Editer",
+        "edit_profile": "Editer mon profil",
+        "profile_edited": "Profil mis à jour avec succes",
+        "logout_success": "Deconnexion reussie",
+        "login_success": "Connexion reussie"
     }
 }

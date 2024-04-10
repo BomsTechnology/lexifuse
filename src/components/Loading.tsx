@@ -1,5 +1,5 @@
-import {  ActivityIndicator } from 'react-native';
-import { SizableText, XStack, YStack } from 'tamagui';
+import { ActivityIndicator, Image } from 'react-native';
+import { SizableText, Spinner, YStack } from 'tamagui';
 
 import Container from './layout/Container';
 import Main from './layout/Main';
@@ -15,14 +15,11 @@ const Loading = () => {
         justifyContent="space-between"
         alignItems="center">
         <YStack flex={1} justifyContent="center" alignItems="center" gap="$5">
-          <XStack alignItems="center">
-            <SizableText color="#fff" size="$10" fontFamily="$heading">
-              Sido
-            </SizableText>
-            <SizableText fontWeight="600" fontSize={50} lineHeight={80} color={colors.orange1}>
-              Lex
-            </SizableText>
-          </XStack>
+          <Image
+            source={require('~/assets/images/logo.png')}
+            resizeMode="contain"
+            style={{ width: 120, height: 120 }}
+          />
           <ActivityIndicator size="large" color="#fff" />
         </YStack>
         <SizableText color="#fff" fontFamily="$heading">

@@ -4,6 +4,7 @@ import { Link, useLocalSearchParams } from 'expo-router';
 import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import { Pressable } from 'react-native';
+import { useToast } from 'react-native-toast-notifications';
 import { H4, SizableText, XStack, YStack } from 'tamagui';
 
 import Piece from '~/src/components/Piece';
@@ -18,6 +19,7 @@ import { currGameWithStorage, gamesWithStorage, userWithStorage } from '~/src/ut
 import { Title } from '~/tamagui.config';
 
 const Finish = () => {
+  const toast = useToast();
   const { nbTrueAnswer } = useLocalSearchParams();
   const points = parseInt(nbTrueAnswer as string);
   const [user, setUser] = useAtom(userWithStorage);
@@ -44,6 +46,12 @@ const Finish = () => {
         });
         setGoToNextLevel(true);
       }
+    },
+    onError: (error) => {
+      toast.show(error.message || i18n.t('default_error_msg'), {
+        type: 'danger',
+        placement: 'top',
+      });
     },
   });
 

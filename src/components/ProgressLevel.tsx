@@ -9,8 +9,11 @@ import colors from '../constants/colors';
 import { getLevelByLevelAndLanguage, goToNextLevel } from '../services/useLevel';
 import { LevelProps } from '../types/LevelProps';
 import { currGameWithStorage } from '../utils/storage';
+import i18n from '../i18n';
+import { useToast } from 'react-native-toast-notifications';
 
 const ProgressLevel = () => {
+  const toast = useToast();
   const [game, setGame] = useAtom(currGameWithStorage);
   const mutationGame = useMutation({
     mutationFn: () =>
@@ -26,6 +29,12 @@ const ProgressLevel = () => {
         });
         refetch();
       }
+    },
+    onError: (error) => {
+      toast.show(error.message || i18n.t('default_error_msg'), {
+        type: 'danger',
+        placement: 'top',
+      });
     },
   });
   const progress = useSharedValue(0);

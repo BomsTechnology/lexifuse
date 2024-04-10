@@ -55,7 +55,7 @@ const Page = () => {
                 color="#fff">
                 {i18n.t('previous_level')}
               </Button>
-            ) : (
+            ) : !user.auth_id ? (
               <Link href={{ pathname: '/sign-in' }} asChild>
                 <Button
                   backgroundColor={colors.orange1}
@@ -65,7 +65,7 @@ const Page = () => {
                   {i18n.t('login')}
                 </Button>
               </Link>
-            )}
+            ) : null}
             <Link
               href={{
                 pathname: '/(app)/(game)/',

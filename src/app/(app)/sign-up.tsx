@@ -28,17 +28,15 @@ import { Title, Subtitle } from '~/tamagui.config';
 
 type Language = Database['public']['Tables']['languages']['Row'];
 
-const FAKE_ID = '8fb324d1-b06c-4f54-954b-84c961c65454';
 export default function SignUp() {
   const { control, handleSubmit, setError } = useForm();
   const router = useRouter();
   const toast = useToast();
   const theme = useTheme();
-  const [settings, setSettings] = useAtom(settingsWithStorage);
+  const [settings] = useAtom(settingsWithStorage);
   const [user, setUser] = useAtom(userWithStorage);
-  const [game, setGame] = useAtom(currGameWithStorage);
   const [gamesStorage, setGamesStorage] = useAtom(gamesWithStorage);
-  const [, setCurrGameStorage] = useAtom(currGameWithStorage);
+  const [game, setCurrGameStorage] = useAtom(currGameWithStorage);
   const onSubmit = (data: FieldValues) => {
     if (data.password !== data.confirmPassword) {
       setError('confirmPassword', {
@@ -51,7 +49,7 @@ export default function SignUp() {
       email: data.email,
       password: data.password,
       username: data.username,
-      auth_id: user.id || FAKE_ID,
+      user_id: user && user.id ? user.id : '',
     });
   };
   const { data } = useQuery<Language, Error>({
@@ -65,13 +63,13 @@ export default function SignUp() {
       email,
       password,
       username,
-      auth_id,
+      user_id,
     }: {
       email: string;
       password: string;
       username: string;
-      auth_id: string;
-    }) => createUser({ email, password, username, auth_id }),
+      user_id: string;
+    }) => createUser({ email, password, username, user_id }),
     onSuccess: (res) => {
       setUser(res!);
       if (game.id !== '') {
@@ -79,8 +77,14 @@ export default function SignUp() {
       } else {
         mutationGame.mutate({ userId: res!.id, languageId: data?.id! });
       }
-      toast.show('Account created', {
+      toast.show(i18n.t('account_created'), {
         type: 'success',
+        placement: 'top',
+      });
+    },
+    onError: (error) => {
+      toast.show(error.message || i18n.t('default_error_msg'), {
+        type: 'danger',
         placement: 'top',
       });
     },
@@ -91,6 +95,13 @@ export default function SignUp() {
     onSuccess: (data) => {
       setCurrGameStorage(data.game!);
       setGamesStorage([...gamesStorage, data.game!]);
+      router.replace('/(app)/(home)/home/');
+    },
+    onError: (error) => {
+      toast.show(error.message || i18n.t('default_error_msg'), {
+        type: 'danger',
+        placement: 'top',
+      });
     },
   });
   return (
@@ -137,6 +148,10 @@ export default function SignUp() {
                 secureTextEntry
                 rules={{
                   required: i18n.t('required_error', { field: i18n.t('password') }),
+                  minLength: {
+                    value: 6,
+                    message: i18n.t('min_length_error', { field: i18n.t('password'), min: 6 }),
+                  },
                 }}
                 icon={<Ionicons name="lock-closed" size={20} color={theme.gray9.get()} />}
               />
@@ -149,17 +164,14 @@ export default function SignUp() {
                 secureTextEntry
                 rules={{
                   required: i18n.t('required_error', { field: i18n.t('confirm_password') }),
+                  minLength: {
+                    value: 6,
+                    message: i18n.t('min_length_error', { field: i18n.t('password'), min: 6 }),
+                  },
                 }}
                 icon={<Ionicons name="lock-closed" size={20} color={theme.gray9.get()} />}
               />
             </YStack>
-            {mutationUser.isError || mutationGame.isError ? (
-              <SizableText color="$red9" textAlign="center" mb="$2">
-                {mutationUser.error!.message ||
-                  mutationGame.error!.message ||
-                  i18n.t('default_error_msg')}
-              </SizableText>
-            ) : null}
             <XStack flexWrap="wrap" gap="$2">
               <Subtitle color="$gray12">{i18n.t('have_account')}</Subtitle>
               <Link href={{ pathname: '/sign-in' }} asChild>

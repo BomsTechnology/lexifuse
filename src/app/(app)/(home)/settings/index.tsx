@@ -1,7 +1,11 @@
 import { Foundation, Ionicons } from '@expo/vector-icons';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'expo-router';
 import * as Sharing from 'expo-sharing';
 import { useAtom } from 'jotai';
+import { RESET } from 'jotai/utils';
 import { useEffect, useRef, useState } from 'react';
+import { useToast } from 'react-native-toast-notifications';
 import { SizableText, ScrollView, YStack, useTheme } from 'tamagui';
 
 import EditProfilBS from '~/src/components/bottomSheet/EditProfilBS';
@@ -15,6 +19,7 @@ import SettingListItemWithSwitch from '~/src/components/listItem/SettingListItem
 import CustomModal from '~/src/components/modal/CustomModal';
 import colors from '~/src/constants/colors';
 import i18n from '~/src/i18n';
+import { logout } from '~/src/services/useAuth';
 import { queryClient } from '~/src/utils/queryClient';
 import {
   currGameWithStorage,
@@ -24,7 +29,9 @@ import {
 } from '~/src/utils/storage';
 
 const Page = () => {
-  const [user] = useAtom(userWithStorage);
+  const router = useRouter();
+  const toast = useToast();
+  const [user, setUser] = useAtom(userWithStorage);
   const [settings, setSettings] = useAtom(settingsWithStorage);
   const [currGameStorage, setCurrGameStorage] = useAtom(currGameWithStorage);
   const [gamesStorage, setGamesStorage] = useAtom(gamesWithStorage);
@@ -39,6 +46,29 @@ const Page = () => {
     setIsOpenLanguage(false);
     queryClient.invalidateQueries({ queryKey: ['current_level'] });
   }, [gamesStorage, currGameStorage]);
+
+  const mutationUser = useMutation({
+    mutationFn: () => logout(),
+    onSuccess: (res) => {
+      setUser(RESET);
+      setGamesStorage(RESET);
+      setCurrGameStorage(RESET);
+      setSettings(RESET);
+
+      toast.show(i18n.t('logout_success'), {
+        type: 'success',
+        placement: 'top',
+      });
+
+      router.replace('/sign-in');
+    },
+    onError: (error) => {
+      toast.show(error.message || i18n.t('default_error_msg'), {
+        type: 'danger',
+        placement: 'top',
+      });
+    },
+  });
 
   return (
     <>
@@ -63,7 +93,7 @@ const Page = () => {
                   onPress={() => setIsOpenLanguage(true)}
                   icon={<Ionicons name="language-sharp" size={20} color={colors.green1} />}
                   text={i18n.t('game_language')}
-                  rightText={currGameStorage.languages?.name}
+                  rightText={i18n.t(currGameStorage.languages?.name!.toLocaleLowerCase()!)}
                 />
                 <SettingListItemWithSwitch
                   icon={
@@ -138,13 +168,14 @@ const Page = () => {
 
                 {user.auth_id && (
                   <CustomModal
-                    title="Déconnexion"
-                    description="Voulez-vous vous deconnecter de votre compte ?"
-                    confirmText="Confirmer"
-                    cancelText="Annuler">
+                    title={i18n.t('logout')}
+                    description={i18n.t('logout_message')}
+                    confirmText={i18n.t('confirm')}
+                    onConfirm={mutationUser.mutate}
+                    cancelText={i18n.t('cancel')}>
                     <SettingListItem
                       icon={<Foundation name="arrow-down" size={20} color={colors.red1} />}
-                      text="Déconnexion"
+                      text={i18n.t('logout')}
                       textColor={colors.red1}
                     />
                   </CustomModal>

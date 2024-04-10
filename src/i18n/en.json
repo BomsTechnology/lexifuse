@@ -32,6 +32,7 @@
         "comming_soon": "Comming soon",
         "options": "Options",
         "logout": "Logout",
+        "logout_message": "Do you want to logout of your account?",
         "game_language": "Game language",
         "sound": "Sound",
         "notifications": "Notifications",
@@ -76,6 +77,8 @@
         "required_error": "%{field} is required",
         "email_error": "Please enter a valid email address",
         "confirm_pass_error": "The passwords must be the same",
+        "min_length_error": "%{field} must be at least %{min} characters long",
+        "max_length_error": "%{field} must be at most %{min} characters long",
         "select_answer_error": "Please select an answer",
         "select_language_error": "Please select a language",
         "default_error_msg": "An error occured, please try again",
@@ -84,6 +87,12 @@
         "won_points": "Won points:",
         "won_next_level": "Next level",
         "bad_answer": "Bad answers:",
-        "good_answer": "Good answers:"
+        "good_answer": "Good answers:",
+        "account_created": "Account created successfully",
+        "edit": "Edit",
+        "edit_profile": "Edit my profile",
+        "profile_edited": "Profile edited successfully",
+        "logout_success": "Logout successful",
+        "login_success": "Login successful"
     }
 }

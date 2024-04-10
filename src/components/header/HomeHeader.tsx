@@ -18,11 +18,11 @@ const HomeHeader = ({ user, game }: { user: UserProps; game: GameProps }) => {
       alignItems="center"
       enterStyle={{ opacity: 0 }}
       animation="bouncy">
-      <ProgressLevel
-        
-      />
+      <ProgressLevel />
       <YStack gap="$1" alignItems="flex-end">
-        <Image source={{ uri: game.languages!.image }} style={{ width: 20, height: 12 }} />
+        {game.languages && (
+          <Image source={{ uri: game.languages!.image }} style={{ width: 20, height: 12 }} />
+        )}
         <XStack alignItems="center" gap="$2">
           <Piece text="C" />
 

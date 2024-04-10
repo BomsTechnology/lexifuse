@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "sidolex",
+    "name": "SidoLex",
     "slug": "sidolex",
     "version": "1.0.0",
-    "scheme": "boilerplate",
+    "scheme": "com.sidolex",
     "web": {
       "bundler": "metro",
       "output": "static",

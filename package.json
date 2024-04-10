@@ -1,5 +1,5 @@
 {
-  "name": "boilerplate",
+  "name": "sidolex",
   "version": "1.0.0",
   "scripts": {
     "android": "expo run:android",

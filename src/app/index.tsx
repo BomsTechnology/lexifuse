@@ -54,6 +54,12 @@ export default function Page() {
       setSettings({ ...settings, language: selected?.iso_code! });
       router.replace('/(app)/(home)/home/');
     },
+    onError: (error) => {
+      toast.show(error.message || i18n.t('default_error_msg'), {
+        type: 'danger',
+        placement: 'top',
+      });
+    },
   });
 
   if (error || userStorage.state === 'hasError')
@@ -61,7 +67,7 @@ export default function Page() {
 
   if (isPending || userStorage.state === 'loading') return <Splash />;
 
-  if (userStorage.data.id !== '') {
+  if (userStorage.data && userStorage.data.id !== '') {
     return <Redirect href="/(app)/(home)/home" />;
   }
   const start = () => {

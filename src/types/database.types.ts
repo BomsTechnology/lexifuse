@@ -192,6 +192,23 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_user: {
+        Args: {
+          auth_email: string
+          password: string
+          auth_username: string
+          id_user: string
+        }
+        Returns: {
+          auth_id: string | null
+          created_at: string
+          email: string | null
+          id: string
+          nb_pieces: number
+          type: string
+          username: string | null
+        }[]
+      }
       get_game_words: {
         Args: {
           lang_id: string
@@ -216,28 +233,15 @@ export type Database = {
         }
         Returns: boolean
       }
-      set_game_user:
-        | {
-            Args: {
-              id_game: string
-              id_user: string
-              id_language: string
-              nb_po: number
-              nb_pi: number
-              level_points: number
-              next_level: number
-            }
-            Returns: boolean
-          }
-        | {
-            Args: {
-              id_game: string
-              id_user: string
-              nb_po: number
-              nb_pi: number
-            }
-            Returns: undefined
-          }
+      set_game_user: {
+        Args: {
+          id_game: string
+          id_user: string
+          nb_po: number
+          nb_pi: number
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

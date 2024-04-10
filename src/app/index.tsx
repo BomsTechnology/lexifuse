@@ -17,7 +17,12 @@ import colors from '../constants/colors';
 import { createGame } from '../services/useGame';
 import { getLanguages } from '../services/useLanguage';
 import { Database } from '../types/database.types';
-import { currGameWithStorage, gamesWithStorage, settingsWithStorage, userWithStorage } from '../utils/storage';
+import {
+  currGameWithStorage,
+  gamesWithStorage,
+  settingsWithStorage,
+  userWithStorage,
+} from '../utils/storage';
 
 import { Subtitle, Title } from '~/tamagui.config';
 import i18n from '../i18n';
@@ -43,7 +48,6 @@ export default function Page() {
   const mutationGame = useMutation({
     mutationFn: (userId: string) => createGame(userId, selected?.id!),
     onSuccess: (data) => {
-
       setCurrGameStorage(data.game!);
       setUserStorage(data.user!);
       setGamesStorage([data.game!]);
@@ -52,7 +56,8 @@ export default function Page() {
     },
   });
 
-  if (error || userStorage.state === 'hasError') return <ErrorPage message={error!.message || i18n.t('default_error_msg')} />;
+  if (error || userStorage.state === 'hasError')
+    return <ErrorPage message={error!.message || i18n.t('default_error_msg')} />;
 
   if (isPending || userStorage.state === 'loading') return <Splash />;
 
@@ -61,7 +66,7 @@ export default function Page() {
   }
   const start = () => {
     if (!selected) {
-      toast.show('Veuillez sélectionner une langue', {
+      toast.show(i18n.t('select_language_error'), {
         type: 'danger',
         placement: 'top',
       });
@@ -91,6 +96,7 @@ export default function Page() {
                 onPress={() => {
                   i18n.locale = item.iso_code!.toLowerCase();
                   setSelected(item);
+                  setSettings({ ...settings, language: item?.iso_code! });
                 }}
               />
             )}

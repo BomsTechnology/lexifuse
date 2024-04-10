@@ -120,7 +120,7 @@ const Page = () => {
     if (user.nb_pieces >= 4 && !isOpenSheetAnswer) {
       setUser((prev) => ({
         ...prev,
-        nb_pieces: prev.nb_pieces - 1,
+        nb_pieces: prev.nb_pieces - 4,
       }));
       setIsOpenSheetAnswer(true);
     } else {
@@ -140,7 +140,15 @@ const Page = () => {
         <Main justifyContent="space-between" pt={35}>
           <YStack enterStyle={{ opacity: 0, scale: 0.5 }} animation="bouncy" flex={1}>
             {gameTable.length > 0 && (
-              <PagerView initialPage={0} style={{ flex: 1 }} scrollEnabled={false} ref={pageView}>
+              <PagerView
+                initialPage={0}
+                style={{ flex: 1 }}
+                scrollEnabled={false}
+                ref={pageView}
+                onPageScroll={() => {
+                  setIsOpenSheetKind(false);
+                  setIsOpenSheetAnswer(false);
+                }}>
                 {gameTable.map((item, i) => (
                   <YStack mt={15} flex={1} key={i + 1}>
                     <SizableText textAlign="center" fontWeight="600" fontSize={20}>

@@ -1,5 +1,6 @@
 import { loginAnonymously } from './useAuth';
 import { supabase } from '../utils/supabase';
+import { GameProps } from '../types/GameProps';
 
 export async function createGame(userId: string, languageId: string) {
   let user = null;
@@ -74,12 +75,12 @@ export async function setGameUser({
   }
 }
 
-export async function getUserGames(userId: string) {
+export async function getGamesByLanguage(languageId: string): Promise<GameProps[]> {
   const games = await supabase
     .from('games')
-    .select('*')
-    .eq('user_id', userId)
-    .order('created_at', { ascending: false })
+    .select('id,level,nb_points, users(id,username,email,type), languages(id,name,image,iso_code)')
+    .eq('language_id', languageId)
+    .order('nb_points', { ascending: false })
     .throwOnError();
-  return games.data;
+  return games.data || [];
 }

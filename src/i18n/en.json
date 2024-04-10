@@ -93,6 +93,9 @@
         "edit_profile": "Edit my profile",
         "profile_edited": "Profile edited successfully",
         "logout_success": "Logout successful",
-        "login_success": "Login successful"
+        "login_success": "Login successful",
+        "anonymous": "Anonymous",
+        "no_ranking": "No ranking for the moment",
+        "you": "You"
     }
 }

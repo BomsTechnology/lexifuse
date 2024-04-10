@@ -45,6 +45,7 @@ const Page = () => {
     refreshKey.current += 1;
     setIsOpenLanguage(false);
     queryClient.invalidateQueries({ queryKey: ['current_level'] });
+    queryClient.invalidateQueries({ queryKey: ['ranking'] });
   }, [gamesStorage, currGameStorage]);
 
   const mutationUser = useMutation({

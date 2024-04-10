@@ -3,14 +3,15 @@ import { View } from 'react-native';
 import { H4, SizableText, XStack } from 'tamagui';
 
 import colors from '~/src/constants/colors';
+import i18n from '~/src/i18n';
 
 type RankingItemProps = {
   index: number;
-  id?: string;
+  you?: boolean;
   name?: string;
   score?: number;
 };
-const RankingItem = ({ index, id, name, score }: RankingItemProps) => {
+const RankingItem = ({ index, you, name, score }: RankingItemProps) => {
   return (
     <XStack
       flex={1}
@@ -57,7 +58,7 @@ const RankingItem = ({ index, id, name, score }: RankingItemProps) => {
           numberOfLines={1}
           color={
             index === 1 || index === 2 || index === 3 ? '#fff' : index === 8 ? '$gray1' : '$gray12'
-          }>{`${index === 8 ? name + ' (Vous)' : name}`}</SizableText>
+          }>{`${you ? name + ` (${i18n.t('you')})` : name}`}</SizableText>
       </XStack>
       <SizableText
         fontWeight="600"

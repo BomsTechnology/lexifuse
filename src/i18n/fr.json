@@ -93,6 +93,9 @@
         "edit_profile": "Editer mon profil",
         "profile_edited": "Profil mis à jour avec succes",
         "logout_success": "Deconnexion reussie",
-        "login_success": "Connexion reussie"
+        "login_success": "Connexion reussie",
+        "anonymous": "Anonyme",
+        "no_ranking": "Pas de classement pour le moment",
+        "you": "Vous"
     }
 }

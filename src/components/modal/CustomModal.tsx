@@ -1,4 +1,4 @@
-import { AlertDialog, AlertDialogProps, Button, XStack, YStack } from 'tamagui';
+import { AlertDialog, AlertDialogProps, Button, H6, XStack, YStack } from 'tamagui';
 
 import colors from '~/src/constants/colors';
 
@@ -31,7 +31,7 @@ const CustomModal = (props: ConfirmModalProps) => {
         />
         <AlertDialog.Content
           maxWidth="90%"
-          minWidth="75%"
+          minWidth="80%"
           borderRadius={30}
           p={30}
           elevate
@@ -65,7 +65,9 @@ const CustomModal = (props: ConfirmModalProps) => {
                   fontFamily="$heading"
                   onPress={props.onCancel}
                   flex={1}>
-                  {props.cancelText}
+                  <H6 lineHeight={16} color="#fff" textAlign="center">
+                    {props.cancelText}
+                  </H6>
                 </Button>
               </AlertDialog.Cancel>
               {!props.hideConfirmBtn && (
@@ -77,7 +79,10 @@ const CustomModal = (props: ConfirmModalProps) => {
                     fontFamily="$heading"
                     onPress={props.onConfirm}
                     flex={1}>
-                    {props.confirmText}
+                    <H6 lineHeight={16} color="#fff" textAlign="center">
+                      {' '}
+                      {props.confirmText}{' '}
+                    </H6>
                   </Button>
                 </AlertDialog.Action>
               )}

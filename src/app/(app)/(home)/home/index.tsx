@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import { useAtom } from 'jotai';
 import { useState } from 'react';
-import { H1, YStack } from 'tamagui';
+import { H1, YStack, H6 } from 'tamagui';
 
 import LevelBS from '~/src/components/bottomSheet/LevelBS';
 import Button from '~/src/components/form/Button';
@@ -30,7 +30,9 @@ const Page = () => {
                 borderBottomColor={colors.orange2}
                 color="#fff">
                 <Ionicons name="person" size={20} color="#fff" />
-                {i18n.t('login')}
+                <H6 lineHeight={16} color="#fff">
+                  {i18n.t('login')}
+                </H6>
               </Button>
             </Link>
           )}
@@ -53,7 +55,9 @@ const Page = () => {
                 backgroundColor={colors.blue1}
                 borderBottomColor={colors.blue2}
                 color="#fff">
-                {i18n.t('previous_level')}
+                <H6 lineHeight={16} color="#fff">
+                  {i18n.t('previous_level')}
+                </H6>
               </Button>
             ) : !user.auth_id ? (
               <Link href={{ pathname: '/sign-in' }} asChild>
@@ -62,7 +66,9 @@ const Page = () => {
                   borderBottomColor={colors.orange2}
                   color="#fff">
                   <Ionicons name="person" size={20} color="#fff" />
-                  {i18n.t('login')}
+                  <H6 lineHeight={16} color="#fff">
+                    {i18n.t('login')}
+                  </H6>
                 </Button>
               </Link>
             ) : null}
@@ -73,12 +79,11 @@ const Page = () => {
               }}
               replace
               asChild>
-              <Button
-                backgroundColor={colors.green1}
-                borderBottomColor={colors.green2}
-                color="#fff">
-                <Ionicons name="add-circle" size={28} color="#fff" />
-                {i18n.t('new_part')}
+              <Button backgroundColor={colors.green1} borderBottomColor={colors.green2}>
+                <Ionicons name="add-circle" size={20} color="#fff" />
+                <H6 lineHeight={16} color="#fff">
+                  {i18n.t('new_part')}
+                </H6>
               </Button>
             </Link>
           </YStack>

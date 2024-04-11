@@ -1,5 +1,5 @@
 import { Image } from 'react-native';
-import { SizableText, XStack, YStack } from 'tamagui';
+import { H6, SizableText, XStack, YStack } from 'tamagui';
 
 import Piece from '../Piece';
 import ProgressLevel from '../ProgressLevel';
@@ -26,9 +26,9 @@ const HomeHeader = ({ user, game }: { user: UserProps; game: GameProps }) => {
         <XStack alignItems="center" gap="$2">
           <Piece text="C" />
 
-          <SizableText color="#fff" size="$4" fontFamily="$heading">
+          <H6 lineHeight={12} fontSize={14} color="#fff">
             {user.nb_pieces}
-          </SizableText>
+          </H6>
         </XStack>
       </YStack>
     </XStack>

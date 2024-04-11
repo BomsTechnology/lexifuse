@@ -1,13 +1,13 @@
 import { useAtom } from 'jotai';
 import { Image } from 'react-native';
-import { H5, SizableText, Square, XStack, YStack } from 'tamagui';
+import { H5, H6, SizableText, Square, XStack, YStack } from 'tamagui';
 
 import Piece from '../Piece';
 
 import colors from '~/src/constants/colors';
+import i18n from '~/src/i18n';
 import { Database } from '~/src/types/database.types';
 import { currGameWithStorage } from '~/src/utils/storage';
-import i18n from '~/src/i18n';
 
 const SettingHeader = ({ user }: { user: Database['public']['Tables']['users']['Row'] }) => {
   const [game] = useAtom(currGameWithStorage);
@@ -38,9 +38,9 @@ const SettingHeader = ({ user }: { user: Database['public']['Tables']['users']['
       <YStack alignItems="flex-end" gap="$1">
         <XStack alignItems="center" gap="$2">
           <Piece text="C" />
-          <SizableText color="#fff" size="$4" fontFamily="$heading">
+          <H6 lineHeight={12} fontSize={14} color="#fff">
             {user.nb_pieces}
-          </SizableText>
+          </H6>
         </XStack>
         <SizableText fontWeight="800" fontSize="$5" color={colors.green1}>
           {game.nb_points} pts

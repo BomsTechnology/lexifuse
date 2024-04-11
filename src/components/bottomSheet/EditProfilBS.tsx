@@ -12,7 +12,7 @@ import { useAtom } from 'jotai';
 import { useCallback, useMemo, useEffect, useRef } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useToast } from 'react-native-toast-notifications';
-import { Theme, useTheme, YStack } from 'tamagui';
+import { H6, Theme, useTheme, YStack } from 'tamagui';
 
 import Button from '../form/Button';
 import Input from '../form/Input';
@@ -105,7 +105,9 @@ const EditProfilBS = ({
           color="#fff"
           enterStyle={{ opacity: 0, y: 50 }}
           animation="bouncy">
-          {i18n.t('edit')}
+          <H6 lineHeight={16} color="#fff">
+            {i18n.t('edit')}
+          </H6>
         </Button>
       </BottomSheetFooter>
     ),

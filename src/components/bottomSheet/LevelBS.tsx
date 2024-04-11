@@ -9,7 +9,7 @@ import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typesc
 import { Link } from 'expo-router';
 import { useCallback, useMemo, useRef, useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import { H2, useTheme } from 'tamagui';
+import { H2, H6, useTheme } from 'tamagui';
 
 import Button from '../form/Button';
 
@@ -68,7 +68,9 @@ const LevelBS = ({
             color="#fff"
             enterStyle={{ opacity: 0, y: 50 }}
             animation="bouncy">
-            {i18n.t('start_part')}
+            <H6 lineHeight={16} color="#fff">
+              {i18n.t('start_part')}
+            </H6>
           </Button>
         </Link>
       </BottomSheetFooter>

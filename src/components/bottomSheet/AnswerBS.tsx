@@ -5,7 +5,7 @@ import {
   BottomSheetFooterProps,
 } from '@gorhom/bottom-sheet';
 import { useCallback, useMemo, useRef, useEffect } from 'react';
-import { H3, SizableText } from 'tamagui';
+import { H3, H6, SizableText } from 'tamagui';
 
 import Button from '../form/Button';
 
@@ -48,7 +48,9 @@ const AnswerBS = ({
           color="#fff"
           enterStyle={{ opacity: 0, y: 50 }}
           animation="bouncy">
-          {textButton}
+          <H6 lineHeight={16} color="#fff">
+            {textButton}
+          </H6>
         </Button>
       </BottomSheetFooter>
     ),

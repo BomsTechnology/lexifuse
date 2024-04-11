@@ -9,7 +9,6 @@ const Button = forwardRef((props: CustomButtomProps, ref) => {
   const borderBottomWith = props.borderBottomWidth ? props.borderBottomWidth : 3;
   return (
     <TamaguiButton
-      fontFamily="$heading"
       size="$5"
       borderRadius="$6"
       borderBottomWidth={borderBottomWith}

@@ -1,16 +1,16 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useAtom } from 'jotai';
 import { useEffect } from 'react';
-import { Image, View, StyleSheet } from 'react-native';
+import { Image, View, StyleSheet, Text } from 'react-native';
 import Animated, { useSharedValue, withSpring, useAnimatedStyle } from 'react-native-reanimated';
-import { SizableText, XStack } from 'tamagui';
+import { useToast } from 'react-native-toast-notifications';
+import { XStack } from 'tamagui';
 
 import colors from '../constants/colors';
+import i18n from '../i18n';
 import { getLevelByLevelAndLanguage, goToNextLevel } from '../services/useLevel';
 import { LevelProps } from '../types/LevelProps';
 import { currGameWithStorage } from '../utils/storage';
-import i18n from '../i18n';
-import { useToast } from 'react-native-toast-notifications';
 
 const ProgressLevel = () => {
   const toast = useToast();
@@ -61,9 +61,9 @@ const ProgressLevel = () => {
   return (
     <XStack bg="#fff" width={120} py="$1" px="$1" borderRadius="$8" position="relative">
       <View style={styles.textContainer}>
-        <SizableText color="#fff" size="$2" fontFamily="$heading" textAlign="center">
+        <Text style={styles.text}>
           {game.nb_points}/{data?.nb_points}
-        </SizableText>
+        </Text>
       </View>
       <XStack bg={colors.blue3} w="100%" borderRadius="$8" h="$1" overflow="hidden">
         <Animated.View style={[styles.progress, animatedStyles]} />
@@ -71,9 +71,7 @@ const ProgressLevel = () => {
       <View style={styles.starContainer}>
         <XStack position="relative">
           <View style={styles.textContainer}>
-            <SizableText color="#fff" size="$3" textAlign="center" fontFamily="$heading">
-              {game.level}
-            </SizableText>
+            <Text style={styles.text}>{game.level}</Text>
           </View>
 
           <Image
@@ -119,6 +117,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 5,
+    height: 'auto',
+  },
+  text: {
+    color: '#fff',
+    fontSize: 10,
+    fontFamily: 'Bungee',
+    textAlign: 'center',
   },
 });
 

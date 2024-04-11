@@ -5,7 +5,7 @@ import { loadable } from 'jotai/utils';
 import { useState } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { useToast } from 'react-native-toast-notifications';
-import { XStack, YStack } from 'tamagui';
+import { H6, XStack, YStack } from 'tamagui';
 
 import ErrorPage from '../components/ErrorPage';
 import Splash from '../components/Splash';
@@ -125,7 +125,9 @@ export default function Page() {
             loading={mutationGame.isPending}
             disabled={mutationGame.isPending}
             color="#fff">
-            {i18n.t('start')}
+            <H6 lineHeight={16} color="#fff">
+              {i18n.t('start')}
+            </H6>
           </Button>
         </YStack>
       </Main>

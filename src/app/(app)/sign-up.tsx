@@ -5,7 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useAtom } from 'jotai';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useToast } from 'react-native-toast-notifications';
-import { YStack, XStack, useTheme, ScrollView, SizableText } from 'tamagui';
+import { YStack, XStack, useTheme, ScrollView, H6 } from 'tamagui';
 
 import i18n from '../../i18n/index';
 
@@ -189,7 +189,9 @@ export default function SignUp() {
           enterStyle={{ opacity: 0, y: 50 }}
           onPress={handleSubmit(onSubmit)}
           animation="bouncy">
-          {i18n.t('register')}
+          <H6 lineHeight={16} color="#fff">
+            {i18n.t('register')}
+          </H6>
         </Button>
       </Main>
       <StatusBar style="dark" />

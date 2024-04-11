@@ -5,7 +5,7 @@ import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import { Pressable } from 'react-native';
 import { useToast } from 'react-native-toast-notifications';
-import { H4, SizableText, XStack, YStack } from 'tamagui';
+import { H4, H6, SizableText, XStack, YStack } from 'tamagui';
 
 import Piece from '~/src/components/Piece';
 import Button from '~/src/components/form/Button';
@@ -144,7 +144,9 @@ const Finish = () => {
               borderBottomColor={colors.green2}
               color="#fff"
               mt={20}>
-              {goToNextLevel ? i18n.t('won_next_level') : i18n.t('new_part')}
+              <H6 lineHeight={16} color="#fff">
+                {goToNextLevel ? i18n.t('won_next_level') : i18n.t('new_part')}
+              </H6>
             </Button>
           </Link>
         </YStack>

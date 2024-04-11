@@ -5,7 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useAtom } from 'jotai';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useToast } from 'react-native-toast-notifications';
-import { YStack, XStack, useTheme, ScrollView } from 'tamagui';
+import { YStack, XStack, useTheme, ScrollView, H6 } from 'tamagui';
 
 import i18n from '../../i18n/index';
 
@@ -100,15 +100,17 @@ export default function SingIn() {
         </YStack>
 
         <Button
-        disabled={mutationUser.isPending}
-        loading={mutationUser.isPending}
+          disabled={mutationUser.isPending}
+          loading={mutationUser.isPending}
           backgroundColor={colors.green1}
           borderBottomColor={colors.green2}
           color="#fff"
           enterStyle={{ opacity: 0, y: 50 }}
           onPress={handleSubmit(onSubmit)}
           animation="bouncy">
-          {i18n.t('login')}
+          <H6 lineHeight={16} color="#fff">
+            {i18n.t('login')}
+          </H6>
         </Button>
       </Main>
       <StatusBar style="dark" />

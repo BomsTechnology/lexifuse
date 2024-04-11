@@ -9,7 +9,7 @@ import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typesc
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo, useRef, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { useTheme } from 'tamagui';
+import { H6, useTheme } from 'tamagui';
 
 import Button from '../form/Button';
 import LanguageItem from '../listItem/LanguageItem';
@@ -117,7 +117,9 @@ const LanguageBS = ({
           color="#fff"
           enterStyle={{ opacity: 0, y: 50 }}
           animation="bouncy">
-          {i18n.t('change')}
+          <H6 lineHeight={16} color="#fff">
+            {i18n.t('change')}
+          </H6>
         </Button>
       </BottomSheetFooter>
     ),

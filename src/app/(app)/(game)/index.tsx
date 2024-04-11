@@ -5,7 +5,7 @@ import { useAtom } from 'jotai';
 import { forwardRef, useState, useRef } from 'react';
 import PagerView from 'react-native-pager-view';
 import { useToast } from 'react-native-toast-notifications';
-import { Circle, H2, ScrollView, SizableText, XStack, YStack } from 'tamagui';
+import { Circle, H2, H6, ScrollView, SizableText, XStack, YStack } from 'tamagui';
 
 import ErrorPage from '~/src/components/ErrorPage';
 import Loading from '~/src/components/Loading';
@@ -233,11 +233,13 @@ const Page = () => {
               borderBottomColor={colors.green2}
               color="#fff"
               onPress={() => onValidate()}>
-              {isValid && currentStep.current === gameTable.length
-                ? i18n.t('finish_part')
-                : isValid
-                  ? i18n.t('next')
-                  : i18n.t('validate')}
+              <H6 lineHeight={16} color="#fff">
+                {isValid && currentStep.current === gameTable.length
+                  ? i18n.t('finish_part')
+                  : isValid
+                    ? i18n.t('next')
+                    : i18n.t('validate')}
+              </H6>
             </Button>
           </YStack>
         </Main>
@@ -301,10 +303,11 @@ const AnswerButton = ({
         backgroundColor={bgColor}
         borderBottomColor={borderColor}
         flex={1}
-        color={textColor}
         disabled={disabled}
         onPress={onPress}>
-        {text}
+        <H6 lineHeight={16} color={textColor}>
+          {text}
+        </H6>
       </Button>
     </XStack>
   );
@@ -337,7 +340,9 @@ const BonusButton = forwardRef(
           flex={1}
           color="#fff">
           {icon}
-          {text}
+          <H6 lineHeight={16} color="#fff">
+            {text}
+          </H6>
         </Button>
       </XStack>
     );

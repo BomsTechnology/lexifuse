@@ -1,5 +1,5 @@
-import { View, StyleSheet, Image } from 'react-native';
-import { SizableText, XStack } from 'tamagui';
+import { View, StyleSheet, Image, Text } from 'react-native';
+import { XStack } from 'tamagui';
 
 const Piece = ({ text, size = 25 }: { text: string; size?: number }) => {
   return (
@@ -13,9 +13,7 @@ const Piece = ({ text, size = 25 }: { text: string; size?: number }) => {
         resizeMode="contain"
       />
       <View style={styles.textContainer}>
-        <SizableText color="#fff" size="$3" textAlign="center" fontFamily="$heading">
-          {text}
-        </SizableText>
+        <Text style={styles.text}>{text}</Text>
       </View>
     </XStack>
   );
@@ -31,6 +29,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 5,
+  },
+  text: {
+    color: '#fff',
+    fontSize: 12,
+    fontFamily: 'Bungee',
+    textAlign: 'center',
+    lineHeight: 12,
   },
 });
 

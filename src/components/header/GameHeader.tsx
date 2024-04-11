@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Image } from 'react-native';
-import { Button, H2, SizableText, XStack, YStack } from 'tamagui';
+import { Button, H2, H6, SizableText, XStack, YStack } from 'tamagui';
 
 import Piece from '../Piece';
 import CustomModal from '../modal/CustomModal';
@@ -53,9 +53,9 @@ const GameHeader = ({
           <XStack alignItems="center" gap="$2">
             <Piece text="C" />
 
-            <SizableText color="#fff" size="$4" fontFamily="$heading">
+            <H6 lineHeight={12} fontSize={14} color="#fff">
               {user.nb_pieces}
-            </SizableText>
+            </H6>
           </XStack>
         </YStack>
       </XStack>

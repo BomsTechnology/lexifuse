@@ -59,7 +59,9 @@ const HelpBS = ({
           color="#fff"
           enterStyle={{ opacity: 0, y: 50 }}
           animation="bouncy">
-          {i18n.t('close')}
+          <H6 lineHeight={16} color="#fff">
+            {i18n.t('close')}
+          </H6>
         </Button>
       </BottomSheetFooter>
     ),

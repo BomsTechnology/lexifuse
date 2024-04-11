@@ -4,7 +4,7 @@ import { Link } from 'expo-router';
 import { useAtom } from 'jotai';
 import { useEffect, useRef } from 'react';
 import { FlatList } from 'react-native';
-import { useTheme, YStack } from 'tamagui';
+import { useTheme, YStack, H6} from 'tamagui';
 
 import Button from '~/src/components/form/Button';
 import Container from '~/src/components/layout/Container';
@@ -49,7 +49,9 @@ const Page = () => {
                   color="#fff"
                   w="100%">
                   <Ionicons name="person" size={20} color="#fff" />
-                  {i18n.t('login')}
+                  <H6 lineHeight={16} color="#fff">
+                    {i18n.t('login')}
+                  </H6>
                 </Button>
               </Link>
             </YStack>
@@ -74,7 +76,7 @@ const Page = () => {
             />
           ) : (
             <YStack flex={1} justifyContent="center" alignItems="center">
-              <Entypo name="emoji-sad" size={50} color={colors.blue1}  />
+              <Entypo name="emoji-sad" size={50} color={colors.blue1} />
               <Title textAlign="center">{i18n.t('no_ranking')}</Title>
             </YStack>
           )}

@@ -7,7 +7,7 @@ import {
 } from '@gorhom/bottom-sheet';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 import { useMemo, useRef, useEffect, useCallback } from 'react';
-import { H3, SizableText, XStack, useTheme } from 'tamagui';
+import { H3, H6, SizableText, XStack, useTheme } from 'tamagui';
 
 import Button from '../form/Button';
 
@@ -57,7 +57,9 @@ const BonusBS = ({
           color="#fff"
           enterStyle={{ opacity: 0, y: 50 }}
           animation="bouncy">
+            <H6 lineHeight={16} color="#fff">
           {i18n.t('close')}
+          </H6>
         </Button>
       </BottomSheetFooter>
     ),

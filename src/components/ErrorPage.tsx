@@ -1,5 +1,5 @@
 import { Link } from 'expo-router';
-import { SizableText } from 'tamagui';
+import { H6, SizableText } from 'tamagui';
 
 import Button from './form/Button';
 import colors from '../constants/colors';
@@ -20,7 +20,9 @@ const ErrorPage = ({ message, button }: { message: string; button?: boolean }) =
           replace
           asChild>
           <Button backgroundColor={colors.green1} borderBottomColor={colors.green2} color="#fff">
-            {i18n.t('back_to_home')}
+            <H6 lineHeight={16} color="#fff">
+              {i18n.t('back_to_home')}
+            </H6>
           </Button>
         </Link>
       )}

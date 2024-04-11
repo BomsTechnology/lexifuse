@@ -187,14 +187,14 @@ const Page = () => {
                             index
                           )}
                           textColor={
-                            use50 && item.answer !== stepWord && index < 2
+                            use50 && item.answer !== stepWord && index < 3
                               ? colors.gray3
                               : currentAnswer !== '' && currentAnswer === stepWord
                                 ? '#fff'
                                 : colors.orange1
                           }
                           key={index}
-                          disabled={isValid || (use50 && item.answer !== stepWord && index < 2)}
+                          disabled={isValid || (use50 && item.answer !== stepWord && index < 3)}
                           icon={
                             isValid && isError && currentAnswer === stepWord
                               ? 'cross'

@@ -21,7 +21,7 @@ export const answerBgColor = (
   if (index === step - 1) {
     if (answer === '') {
       if (use50) {
-        if (word !== trueAnswer && btnPosition < 2) {
+        if (word !== trueAnswer && btnPosition < 3) {
           return colors.gray2;
         } else {
           return colors.orange3;
@@ -33,7 +33,7 @@ export const answerBgColor = (
       if (answer === word) {
         return colors.orange1;
       } else if (use50) {
-        if (word !== trueAnswer && btnPosition < 2) {
+        if (word !== trueAnswer && btnPosition < 3) {
           return colors.gray2;
         } else {
           return colors.orange3;
@@ -46,7 +46,7 @@ export const answerBgColor = (
         if (answer === word) {
           return colors.red1;
         } else if (use50) {
-          if (word !== trueAnswer && btnPosition < 2) {
+          if (word !== trueAnswer && btnPosition < 3) {
             return colors.gray2;
           } else {
             return colors.orange3;
@@ -58,7 +58,7 @@ export const answerBgColor = (
         if (answer === word) {
           return colors.green1;
         } else if (use50) {
-          if (word !== trueAnswer && btnPosition < 2) {
+          if (word !== trueAnswer && btnPosition < 3) {
             return colors.gray2;
           } else {
             return colors.orange3;
@@ -87,7 +87,7 @@ export const answerBorderColor = (
   if (index === step - 1) {
     if (answer === '') {
       if (use50) {
-        if (word !== trueAnswer && btnPosition < 2) {
+        if (word !== trueAnswer && btnPosition < 3) {
           return colors.gray2;
         } else {
           return colors.orange4;
@@ -99,7 +99,7 @@ export const answerBorderColor = (
       if (answer === word) {
         return colors.orange2;
       } else if (use50) {
-        if (word !== trueAnswer && btnPosition < 2) {
+        if (word !== trueAnswer && btnPosition < 3) {
           return colors.gray2;
         } else {
           return colors.orange4;
@@ -112,7 +112,7 @@ export const answerBorderColor = (
         if (answer === word) {
           return colors.red2;
         } else if (use50) {
-          if (word !== trueAnswer && btnPosition < 2) {
+          if (word !== trueAnswer && btnPosition < 3) {
             return colors.gray2;
           } else {
             return colors.orange4;
@@ -124,7 +124,7 @@ export const answerBorderColor = (
         if (answer === word) {
           return colors.green2;
         } else if (use50) {
-          if (word !== trueAnswer && btnPosition < 2) {
+          if (word !== trueAnswer && btnPosition < 3) {
             return colors.gray2;
           } else {
             return colors.orange4;

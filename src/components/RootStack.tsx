@@ -20,36 +20,19 @@ const RootStack = () => {
     setSound(sound);
   }
 
-  async function unloadSound() {
-    if (sound) {
-      await sound.stopAsync();
-      await sound.unloadAsync();
-    }
-  }
-
   useEffect(() => {
     loadSound();
-
-    return () => {
-      unloadSound();
-    };
   }, []);
 
-  useEffect(() => {
-    if (settings.sound) {
-      if (sound) {
-        sound.playAsync();
-      }
-    } else {
-      if (sound) {
-        sound?.stopAsync();
-      }
+  if (settings.sound) {
+    if (sound) {
+      sound.playAsync();
     }
-
-    return () => {
-      unloadSound();
-    };
-  }, [settings.sound]);
+  } else {
+    if (sound) {
+      sound?.stopAsync();
+    }
+  }
 
   if (!sound) {
     return <Splash />;

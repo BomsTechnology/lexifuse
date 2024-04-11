@@ -14,6 +14,7 @@ import Container from '../components/layout/Container';
 import Main from '../components/layout/Main';
 import LanguageItem from '../components/listItem/LanguageItem';
 import colors from '../constants/colors';
+import i18n from '../i18n';
 import { createGame } from '../services/useGame';
 import { getLanguages } from '../services/useLanguage';
 import { Database } from '../types/database.types';
@@ -25,7 +26,6 @@ import {
 } from '../utils/storage';
 
 import { Subtitle, Title } from '~/tamagui.config';
-import i18n from '../i18n';
 
 type Language = Database['public']['Tables']['languages']['Row'];
 const asyncAtom = atom(async (get) => get(userWithStorage));

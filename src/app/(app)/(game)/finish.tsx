@@ -27,18 +27,25 @@ const Finish = () => {
   const [gamesStorage, setGamesStorage] = useAtom(gamesWithStorage);
   const [goToNextLevel, setGoToNextLevel] = useState(false);
   const level: LevelProps = queryClient.getQueryData(['current_level'])!;
+  const newPoints = game.nb_points + points * 5;
+  const newPieces = user.nb_pieces + points;
   const mutationGame = useMutation({
     mutationFn: () =>
       setGameUser({
         id_game: game.id,
         id_user: user.id,
         id_language: game.languages?.id!,
-        nb_po: game.nb_points + points * 5,
-        nb_pi: user.nb_pieces + points * 2,
+        nb_po: newPoints,
+        nb_pi: newPieces,
         level_points: level.nb_points,
         next_level: game.level + 1,
       }),
     onSuccess: (data) => {
+      replaceGamesStore();
+      setUser({
+        ...user,
+        nb_pieces: newPieces,
+      });
       if (data) {
         setGame({
           ...game,
@@ -56,12 +63,7 @@ const Finish = () => {
   });
 
   useEffect(() => {
-    mutationGame.mutate();
-    replaceGamesStore();
-    setUser({
-      ...user,
-      nb_pieces: user.nb_pieces + points * 2,
-    });
+    mutationGame.mutateAsync();
   }, []);
 
   const replaceGamesStore = () => {
@@ -69,7 +71,7 @@ const Finish = () => {
       if (item.id === game.id) {
         const newGame = {
           ...game,
-          nb_points: game.nb_points + points * 5,
+          nb_points: newPoints,
         };
         setGame(newGame);
         return newGame;
@@ -109,17 +111,17 @@ const Finish = () => {
 
           <XStack w="100%" justifyContent="space-between" px={30} alignItems="center" my={10}>
             <SizableText fontWeight="600" fontSize={16}>
-              {i18n.t('won_coins')}
+              {i18n.t('won_points')}
             </SizableText>
             <H4 color={colors.blue1}>{points * 5}</H4>
           </XStack>
           <XStack w="100%" justifyContent="space-between" px={30} alignItems="center" mb={20}>
             <SizableText fontWeight="600" fontSize={16}>
-              {i18n.t('won_points')}
+              {i18n.t('won_coins')}
             </SizableText>
             <XStack alignItems="center" gap="$2">
               <Piece text="C" />
-              <H4 color={colors.orange1}>{points * 2}</H4>
+              <H4 color={colors.orange1}>{points}</H4>
             </XStack>
           </XStack>
           {goToNextLevel && (

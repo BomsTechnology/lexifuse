@@ -2,7 +2,7 @@
   "expo": {
     "name": "SidoLex",
     "slug": "sidolex",
-    "version": "1.0.0",
+    "version": "1.0.5",
     "scheme": "com.sidolex",
     "web": {
       "bundler": "metro",
@@ -38,7 +38,22 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.bomstechnology.sidolex"
+      "package": "com.bomstechnology.sidolex",
+      "versionCode": 5
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "5cb7c946-c9c2-406c-b291-bddde8fce10c"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/5cb7c946-c9c2-406c-b291-bddde8fce10c"
     }
   }
 }

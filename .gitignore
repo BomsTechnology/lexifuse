@@ -13,6 +13,7 @@ web-build/
 expo-env.d.ts
 # tamagui
 .tamagui/
+assets/sidolex-04c099e4e413.json
 # firebase/supabase
 .env
 

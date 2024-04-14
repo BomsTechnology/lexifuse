@@ -1,4 +1,3 @@
-import { Database } from '../types/database.types';
 import { supabase } from '../utils/supabase';
 
 export async function loginAnonymously() {
@@ -17,6 +16,12 @@ export async function createUser({
   username: string;
   user_id: string;
 }) {
+  email = email.toLowerCase();
+  const isexist = await supabase.from('users').select().eq('email', email).single();
+  if (isexist.data) {
+    throw new Error('Email already exists');
+  }
+
   const auth = await supabase.auth.signUp({
     email,
     password,

@@ -2,7 +2,6 @@ import { Ionicons, Entypo } from '@expo/vector-icons';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'expo-router';
 import { useAtom } from 'jotai';
-import { useEffect, useRef } from 'react';
 import { FlatList } from 'react-native';
 import { useTheme, YStack, H6 } from 'tamagui';
 
@@ -20,18 +19,11 @@ import { Subtitle, Title } from '~/tamagui.config';
 const Page = () => {
   const [user] = useAtom(userWithStorage);
   const [game] = useAtom(currGameWithStorage);
-  const aref = useRef<FlatList>(null);
   const theme = useTheme();
   const { data, isPending } = useQuery<GameProps[], Error>({
     queryKey: ['ranking', game.languages?.id],
     queryFn: () => getGamesByLanguage(game.languages?.id!),
   });
-  const index = data?.findIndex((d) => d.users!.id === user.id);
-  useEffect(() => {
-    if (index !== undefined) {
-      aref.current?.scrollToIndex({ index, animated: true });
-    }
-  }, [index]);
   return (
     <Container>
       <Title color="#fff" textAlign="center" mt={20} enterStyle={{ opacity: 0 }} animation="bouncy">
@@ -58,14 +50,13 @@ const Page = () => {
               </YStack>
             ) : data?.length! > 1 ? (
               <FlatList
-                ref={aref}
                 data={data}
                 renderItem={({ item, index }) => (
                   <RankingItem
                     index={index + 1}
-                    name={item.users.username ? item.users.username : i18n.t('anonymous')}
+                    name={item.users!.username ? item.users!.username : i18n.t('anonymous')}
                     score={item.nb_points}
-                    you={user.id === item.users.id}
+                    you={user.id === item.users!.id}
                   />
                 )}
                 keyExtractor={(_, index) => index.toString()}

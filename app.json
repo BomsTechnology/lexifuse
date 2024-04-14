@@ -2,7 +2,8 @@
   "expo": {
     "name": "SidoLex",
     "slug": "sidolex",
-    "version": "1.0.5",
+    "version": "1.0.6",
+    "owner": "bomstechnology",
     "scheme": "com.sidolex",
     "web": {
       "bundler": "metro",
@@ -11,7 +12,6 @@
     },
     "plugins": [
       "expo-router",
-      "expo-localization",
       "expo-font"
     ],
     "experiments": {
@@ -39,7 +39,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.bomstechnology.sidolex",
-      "versionCode": 5
+      "versionCode": 6
     },
     "extra": {
       "router": {

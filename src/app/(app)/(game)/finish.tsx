@@ -55,6 +55,11 @@ const Finish = () => {
       }
     },
     onError: (error) => {
+      replaceGamesStore();
+      setUser({
+        ...user,
+        nb_pieces: newPieces,
+      });
       toast.show(error.message || i18n.t('default_error_msg'), {
         type: 'danger',
         placement: 'top',

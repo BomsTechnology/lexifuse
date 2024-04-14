@@ -9,22 +9,30 @@ import {
   Exo_500Medium,
 } from '@expo-google-fonts/exo';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider, focusManager } from '@tanstack/react-query';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { Provider as JotaiProvider } from 'jotai';
 import { useEffect } from 'react';
+import { AppStateStatus, Platform } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ToastProvider } from 'react-native-toast-notifications';
 import { TamaguiProvider } from 'tamagui';
 
 import RootStack from '../components/RootStack';
 import Splash from '../components/Splash';
+import { useAppState } from '../hooks/useAppState';
 
 import { queryClient } from '~/src/utils/queryClient';
 import config from '~/tamagui.config';
 
 SplashScreen.preventAutoHideAsync();
+
+function onAppStateChange(status: AppStateStatus) {
+  if (Platform.OS !== 'web') {
+    focusManager.setFocused(status === 'active');
+  }
+}
 
 export default function Root() {
   const [loaded] = useFonts({
@@ -43,6 +51,8 @@ export default function Root() {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
+
+  useAppState(onAppStateChange);
 
   if (!loaded) return <Splash />;
 

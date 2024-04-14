@@ -25,7 +25,7 @@ const RankingItem = ({ index, you, name, score }: RankingItemProps) => {
             ? colors.blue1
             : index === 3
               ? colors.green1
-              : index === 8
+              : you
                 ? '$gray12'
                 : '$gray1'
       }
@@ -42,13 +42,7 @@ const RankingItem = ({ index, you, name, score }: RankingItemProps) => {
             <View style={{ width: 8, height: 14 }} />
           )}
           <H4
-            color={
-              index === 1 || index === 2 || index === 3
-                ? '#fff'
-                : index === 8
-                  ? '$gray1'
-                  : '$gray10'
-            }>
+            color={index === 1 || index === 2 || index === 3 ? '#fff' : you ? '$gray1' : '$gray10'}>
             {index}
           </H4>
         </XStack>
@@ -57,18 +51,14 @@ const RankingItem = ({ index, you, name, score }: RankingItemProps) => {
           maxWidth="80%"
           numberOfLines={1}
           color={
-            index === 1 || index === 2 || index === 3 ? '#fff' : index === 8 ? '$gray1' : '$gray12'
+            index === 1 || index === 2 || index === 3 ? '#fff' : you ? '$gray1' : '$gray12'
           }>{`${you ? name + ` (${i18n.t('you')})` : name}`}</SizableText>
       </XStack>
       <SizableText
         fontWeight="600"
         style={{ textAlign: 'center' }}
         color={
-          index === 1 || index === 2 || index === 3
-            ? '#fff'
-            : index === 8
-              ? colors.green1
-              : colors.blue1
+          index === 1 || index === 2 || index === 3 ? '#fff' : you ? colors.green1 : colors.blue1
         }>{`${score} pts`}</SizableText>
     </XStack>
   );

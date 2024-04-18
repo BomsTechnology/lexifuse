@@ -48,10 +48,13 @@ const ProgressLevel = () => {
 
   useEffect(() => {
     progress.value = withSpring(game.nb_points);
+  }, [game]);
+
+  useEffect(() => {
     if (game.nb_points > data?.nb_points!) {
       mutationGame.mutate();
     }
-  }, [game]);
+  }, []);
 
   const animatedStyles = useAnimatedStyle(() => {
     return {

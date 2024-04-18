@@ -95,6 +95,7 @@ export default function SignUp() {
     onSuccess: (data) => {
       setCurrGameStorage(data.game!);
       setGamesStorage([...gamesStorage, data.game!]);
+      i18n.locale = data.game!.languages!.iso_code!;
       router.replace('/(app)/(home)/home/');
     },
     onError: (error) => {

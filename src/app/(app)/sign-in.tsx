@@ -40,6 +40,7 @@ export default function SingIn() {
       setUser(res.user!);
       setGamesStorage(res.games!);
       setCurrGameStorage(res.games![0]);
+      i18n.locale = res.games![0].languages?.iso_code!;
       toast.show(i18n.t('login_success'), {
         type: 'success',
         placement: 'top',
